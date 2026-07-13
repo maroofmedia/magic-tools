@@ -10,7 +10,7 @@
   }
 </style>
 
-<section class="relative overflow-hidden pt-32 pb-20 sm:pt-40 sm:pb-28">
+<section class="relative overflow-hidden pt-16 pb-12 sm:pt-24 sm:pb-16">
   <!-- Background gradient blobs -->
   <div class="absolute inset-0 -z-10" aria-hidden="true">
     <div class="absolute top-0 left-1/4 w-96 h-96 bg-brand-300/20 dark:bg-brand-700/10 rounded-full blur-3xl"></div>
@@ -52,7 +52,7 @@
         </svg>
       </a>
       <a
-        href="#privacy"
+        href="/privacy"
         class="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 font-semibold text-sm transition-all duration-200"
       >
         <svg class="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -66,9 +66,9 @@
     <!-- Stats row -->
     <div class="animate-fade-in-up mt-16 flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-12" style="animation-delay: 240ms">
       {[
-        { value: '14', label: 'Tools Available' },
-        { value: '0', label: 'Files Uploaded' },
-        { value: '100%', label: 'Free & Open Source' },
+        { value: 'Instant', label: 'Local Processing' },
+        { value: 'Zero', label: 'Data Tracking' },
+        { value: '100%', label: 'Magic Inside' },
       ].map(({ value, label }) => (
         <div class="text-center">
           <div class="text-3xl font-bold gradient-text">{value}</div>

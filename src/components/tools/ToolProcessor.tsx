@@ -89,7 +89,7 @@ export default function ToolProcessor({ tool, processFiles, optionsRenderer, def
   const isDone = status === 'done';
 
   return (
-    <div class="space-y-6 max-w-4xl">
+    <div class="space-y-6 max-w-4xl mx-auto">
       {/* ── Drop Zone ───────────────────────────────── */}
       {!isDone && (
         <DropZone

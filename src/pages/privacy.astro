@@ -1,0 +1,23 @@
+---
+/**
+ * privacy.astro — Dedicated privacy page
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+import PrivacySection from '@/components/home/PrivacySection.astro';
+import { SITE_DESCRIPTION } from '@/utils/seo';
+---
+
+<BaseLayout
+  title="Privacy Policy"
+  description={SITE_DESCRIPTION}
+>
+  <Header />
+
+  <main id="main-content" class="min-h-screen pt-16 pb-16">
+    <PrivacySection />
+  </main>
+
+  <Footer />
+</BaseLayout>

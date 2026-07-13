@@ -9,26 +9,26 @@ export default function BatchCompressTool({ tool }: Props) {
   return (
     <ToolProcessor
       tool={tool}
-      defaultOptions={{ quality: 0.8 }}
+      defaultOptions={{ targetSizeMB: 1 }}
       optionsRenderer={(_files, options, setOptions) => (
         <div>
-          <label for="batch-quality" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-            Quality: <strong>{Math.round((options.quality as number) * 100)}%</strong>
+          <label for="batch-target-size" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+            Target Size (MB): <strong>{options.targetSizeMB as number} MB</strong>
           </label>
           <input
-            id="batch-quality"
-            type="range" min="10" max="100" step="5"
-            value={Math.round((options.quality as number) * 100)}
-            onInput={(e) => setOptions({ ...options, quality: parseInt((e.target as HTMLInputElement).value) / 100 })}
+            id="batch-target-size"
+            type="range" min="0.1" max="20" step="0.1"
+            value={options.targetSizeMB as number}
+            onInput={(e) => setOptions({ ...options, targetSizeMB: parseFloat((e.target as HTMLInputElement).value) })}
             class="w-full accent-brand-600"
           />
           <div class="flex justify-between text-xs text-neutral-400 mt-1">
-            <span>Smaller file</span><span>Best quality</span>
+            <span>0.1 MB</span><span>20 MB</span>
           </div>
         </div>
       )}
       processFiles={async (files, options, onProgress) =>
-        batchCompressImages(files, onProgress, options.quality as number)
+        batchCompressImages(files, onProgress, options.targetSizeMB as number)
       }
     />
   );

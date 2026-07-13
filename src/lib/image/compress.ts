@@ -7,7 +7,7 @@ import type { ToolProcessResult } from '@/types/index';
 export async function compressImage(
   file: File,
   onProgress: (pct: number) => void,
-  quality = 0.8,
+  targetSizeMB = 1,
   maxWidthOrHeight = 4096,
 ): Promise<ToolProcessResult> {
   onProgress(10);
@@ -18,11 +18,10 @@ export async function compressImage(
   onProgress(30);
 
   const options = {
-    maxSizeMB: 10,
+    maxSizeMB: targetSizeMB,
     maxWidthOrHeight,
     useWebWorker: true,
     fileType: file.type as 'image/jpeg' | 'image/png' | 'image/webp',
-    initialQuality: quality,
     onProgress: (p: number) => onProgress(30 + p * 0.6),
   };
 
@@ -51,7 +50,7 @@ export async function compressImage(
 export async function batchCompressImages(
   files: File[],
   onProgress: (pct: number) => void,
-  quality = 0.8,
+  targetSizeMB = 1,
 ): Promise<ToolProcessResult> {
   const imageCompression = (await import('browser-image-compression')).default;
   const results = [];
@@ -62,9 +61,8 @@ export async function batchCompressImages(
     onProgress(i * step);
 
     const compressed = await imageCompression(file, {
-      maxSizeMB: 10,
+      maxSizeMB: targetSizeMB,
       useWebWorker: true,
-      initialQuality: quality,
       fileType: file.type as 'image/jpeg' | 'image/png' | 'image/webp',
     });
 
