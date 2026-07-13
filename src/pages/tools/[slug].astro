@@ -1,0 +1,64 @@
+---
+/**
+ * /tools/[slug].astro
+ * Auto-generates one page per tool from the registry.
+ * The correct Preact tool island is selected via slug.
+ */
+import ToolLayout from '@/layouts/ToolLayout.astro';
+import ToastContainer from '@/components/common/Toast';
+import CompressImageTool from '@/components/tools/islands/CompressImageTool';
+import BatchCompressTool from '@/components/tools/islands/BatchCompressTool';
+import CropImageTool from '@/components/tools/islands/CropImageTool';
+import ConvertFormatTool from '@/components/tools/islands/ConvertFormatTool';
+import ImageToPdfTool from '@/components/tools/islands/ImageToPdfTool';
+import MergePdfTool from '@/components/tools/islands/MergePdfTool';
+import SplitPdfTool from '@/components/tools/islands/SplitPdfTool';
+import CompressPdfTool from '@/components/tools/islands/CompressPdfTool';
+import PdfToImagesTool from '@/components/tools/islands/PdfToImagesTool';
+import { TOOLS } from '@/utils/tools-config';
+import type { ToolConfig } from '@/types/index';
+
+export async function getStaticPaths() {
+  return TOOLS.map((tool) => ({
+    params: { slug: tool.slug },
+    props: { tool },
+  }));
+}
+
+interface Props { tool: ToolConfig }
+const { tool } = Astro.props;
+const slug = tool.slug;
+---
+
+<ToolLayout tool={tool}>
+  <ToastContainer client:load />
+
+  {slug === 'compress-image' && (
+    <CompressImageTool tool={tool} client:load />
+  )}
+  {slug === 'batch-compress' && (
+    <BatchCompressTool tool={tool} client:load />
+  )}
+  {slug === 'crop-image' && (
+    <CropImageTool tool={tool} client:load />
+  )}
+  {(slug === 'jpg-to-png' || slug === 'png-to-jpg' || slug === 'convert-to-webp' ||
+    slug === 'webp-to-png' || slug === 'webp-to-jpg' || slug === 'convert-avif') && (
+    <ConvertFormatTool tool={tool} client:load />
+  )}
+  {(slug === 'image-to-pdf' || slug === 'pdf-image-to-pdf') && (
+    <ImageToPdfTool tool={tool} client:load />
+  )}
+  {slug === 'merge-pdf' && (
+    <MergePdfTool tool={tool} client:load />
+  )}
+  {slug === 'split-pdf' && (
+    <SplitPdfTool tool={tool} client:load />
+  )}
+  {slug === 'compress-pdf' && (
+    <CompressPdfTool tool={tool} client:load />
+  )}
+  {slug === 'pdf-to-images' && (
+    <PdfToImagesTool tool={tool} client:load />
+  )}
+</ToolLayout>

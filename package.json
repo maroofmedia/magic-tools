@@ -1,0 +1,31 @@
+{
+  "name": "browser-tools",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/preact": "^6.0.1",
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^7.0.7",
+    "browser-image-compression": "^2.0.2",
+    "cropperjs": "^2.1.1",
+    "jszip": "^3.10.1",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^6.1.200",
+    "preact": "^10.29.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.2",
+    "@types/jszip": "^3.4.0",
+    "tailwindcss": "^4.3.2",
+    "typescript": "^7.0.2"
+  }
+}

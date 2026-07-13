@@ -1,0 +1,73 @@
+---
+/**
+ * FAQ.astro — Frequently asked questions with accordion
+ */
+const faqs = [
+  {
+    q: 'Are these tools really free?',
+    a: 'Yes — BrowserTools is completely free, forever. There are no premium tiers, no account required, and no limits on how many files you process.',
+  },
+  {
+    q: 'Do my files get uploaded to your servers?',
+    a: 'No. Every tool processes files entirely inside your browser using the File API, Canvas API, and WebAssembly. Your files never leave your device. You can verify this by opening your browser\'s Network inspector — you\'ll see zero file uploads.',
+  },
+  {
+    q: 'What browsers are supported?',
+    a: 'BrowserTools works in any modern browser: Chrome, Firefox, Safari, and Edge (all versions released after 2020). AVIF encoding requires Chrome 94+ or Firefox 113+.',
+  },
+  {
+    q: 'Is there a file size limit?',
+    a: 'Each tool has a generous per-file limit (typically 50 MB for images, 100 MB for PDFs). These limits exist because all processing happens in your browser\'s memory — very large files may be slow on older devices.',
+  },
+  {
+    q: 'Can I use it offline?',
+    a: 'Once the page has loaded, most tools work without an internet connection. Heavy libraries (like PDF processing) are loaded on-demand when you first use that tool.',
+  },
+  {
+    q: 'Does the crop tool preserve image quality?',
+    a: 'Crop uses the browser\'s native Canvas API. JPEG output quality is set to 95% by default. PNG output is lossless.',
+  },
+  {
+    q: 'What is AVIF and should I use it?',
+    a: 'AVIF is a next-generation image format with excellent compression — typically 50% smaller than JPEG at the same quality. It\'s supported in Chrome, Firefox, and Safari 16+. Use WebP if you need broader compatibility.',
+  },
+  {
+    q: 'Can I process multiple files at once?',
+    a: 'Yes. Tools like "Batch Image Compression", "Merge PDF", and "Image to PDF" accept multiple files simultaneously. Other single-purpose tools process one file at a time to keep the interface simple.',
+  },
+];
+---
+
+<section id="faq" class="section-padding scroll-mt-20">
+  <div class="container">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-neutral-50 mb-4">
+        Frequently asked questions
+      </h2>
+      <p class="text-neutral-600 dark:text-neutral-400 max-w-xl mx-auto">
+        Everything you need to know about BrowserTools.
+      </p>
+    </div>
+
+    <div class="max-w-3xl mx-auto divide-y divide-neutral-200 dark:divide-neutral-800">
+      {faqs.map(({ q, a }, idx) => (
+        <details class="group py-5" open={idx === 0}>
+          <summary class="flex items-start justify-between gap-4 cursor-pointer list-none select-none">
+            <span class="text-base font-semibold text-neutral-900 dark:text-neutral-100 group-open:text-brand-600 dark:group-open:text-brand-400 transition-colors">
+              {q}
+            </span>
+            <svg
+              class="flex-shrink-0 w-5 h-5 text-neutral-400 mt-0.5 transition-transform duration-200 group-open:rotate-180"
+              fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </summary>
+          <p class="mt-3 text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+            {a}
+          </p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>

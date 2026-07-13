@@ -1,0 +1,77 @@
+---
+/**
+ * ToolCard.astro — Tool card for the homepage grid
+ */
+import type { ToolConfig } from '@/types/index';
+
+interface Props {
+  tool: ToolConfig;
+  animate?: boolean;
+  delay?: number;
+}
+const { tool, animate = true, delay = 0 } = Astro.props;
+
+const categoryColor = tool.category === 'image'
+  ? 'bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400'
+  : 'bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400';
+---
+
+<a
+  href={tool.comingSoon ? undefined : `/tools/${tool.slug}`}
+  aria-label={`${tool.name} — ${tool.description}`}
+  class:list={[
+    'group relative flex flex-col p-5 rounded-2xl border border-neutral-200 dark:border-neutral-800',
+    'bg-white dark:bg-neutral-900 shadow-sm',
+    'card-hover',
+    animate && 'animate-fade-in-up',
+    tool.comingSoon && 'opacity-60 cursor-not-allowed pointer-events-none',
+  ]}
+  style={delay ? `animation-delay: ${delay}ms` : undefined}
+>
+  <!-- Top row -->
+  <div class="flex items-start justify-between mb-3">
+    <div class="w-11 h-11 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-2xl transition-transform duration-200 group-hover:scale-110">
+      {tool.icon}
+    </div>
+    <span class={`text-xs font-medium px-2.5 py-1 rounded-full ${categoryColor}`}>
+      {tool.category}
+    </span>
+  </div>
+
+  <!-- Content -->
+  <h3 class="text-base font-semibold text-neutral-900 dark:text-neutral-100 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
+    {tool.name}
+  </h3>
+  <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed flex-1">
+    {tool.description}
+  </p>
+
+  <!-- Footer -->
+  <div class="mt-4 flex items-center justify-between">
+    <div class="flex gap-1 flex-wrap">
+      {tool.acceptedExtensions.slice(0, 3).map((ext) => (
+        <span class="text-xs font-mono text-neutral-400 dark:text-neutral-500">{ext}</span>
+      ))}
+      {tool.acceptedExtensions.length > 3 && (
+        <span class="text-xs text-neutral-400 dark:text-neutral-500">+{tool.acceptedExtensions.length - 3}</span>
+      )}
+    </div>
+    {tool.comingSoon ? (
+      <span class="text-xs font-medium text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-neutral-800 px-2 py-0.5 rounded-full">
+        Coming soon
+      </span>
+    ) : (
+      <svg class="w-4 h-4 text-neutral-400 group-hover:text-brand-500 transition-colors translate-x-0 group-hover:translate-x-0.5 transition-transform duration-200"
+        fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    )}
+  </div>
+
+  <!-- Featured badge -->
+  {tool.featured && (
+    <div class="absolute top-3 right-3 -mt-0.5 -mr-0.5">
+      <span class="sr-only">Featured</span>
+    </div>
+  )}
+</a>

@@ -1,0 +1,41 @@
+---
+/**
+ * CategoryGrid.astro — Category + tool grid sections on the homepage
+ */
+import ToolCard from './ToolCard.astro';
+import { TOOLS, CATEGORIES } from '@/utils/tools-config';
+---
+
+{CATEGORIES.map((cat) => {
+  const tools = TOOLS.filter((t) => t.category === cat.id);
+  return (
+    <section id={cat.id} class="section-padding scroll-mt-20">
+      <div class="container">
+        <!-- Section header -->
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+          <div>
+            <div class="flex items-center gap-3 mb-2">
+              <span class="text-3xl" aria-hidden="true">{cat.icon}</span>
+              <h2 class="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-neutral-50">
+                {cat.label}
+              </h2>
+            </div>
+            <p class="text-neutral-600 dark:text-neutral-400 max-w-lg">
+              {cat.description}
+            </p>
+          </div>
+          <span class="flex-shrink-0 text-sm text-neutral-500 dark:text-neutral-400">
+            {tools.length} tool{tools.length !== 1 ? 's' : ''}
+          </span>
+        </div>
+
+        <!-- Tool grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 stagger-children">
+          {tools.map((tool, i) => (
+            <ToolCard tool={tool} delay={i * 60} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+})}

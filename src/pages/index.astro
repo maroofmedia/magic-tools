@@ -1,0 +1,72 @@
+---
+/**
+ * index.astro — BrowserTools homepage
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+import Hero from '@/components/home/Hero.astro';
+import SearchBar from '@/components/home/SearchBar';
+import CategoryGrid from '@/components/home/CategoryGrid.astro';
+import PrivacySection from '@/components/home/PrivacySection.astro';
+import FAQ from '@/components/home/FAQ.astro';
+import ToolCard from '@/components/home/ToolCard.astro';
+import ToastContainer from '@/components/common/Toast';
+import { getFeaturedTools } from '@/utils/tools-config';
+import { buildHomepageSchema, SITE_DESCRIPTION } from '@/utils/seo';
+
+const featuredTools = getFeaturedTools();
+const schema = buildHomepageSchema();
+---
+
+<BaseLayout
+  description={SITE_DESCRIPTION}
+  schema={schema}
+>
+  <Header />
+  <ToastContainer client:load />
+
+  <main id="main-content">
+    <!-- Hero -->
+    <Hero />
+
+    <!-- Search -->
+    <section class="py-10 border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900" aria-label="Search tools">
+      <div class="container">
+        <SearchBar client:load />
+      </div>
+    </section>
+
+    <!-- Featured tools -->
+    <section id="tools" class="section-padding scroll-mt-16" aria-labelledby="featured-heading">
+      <div class="container">
+        <div class="mb-8">
+          <h2 id="featured-heading" class="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-neutral-50 mb-2">
+            Featured Tools
+          </h2>
+          <p class="text-neutral-600 dark:text-neutral-400">
+            The most popular tools — ready to use instantly.
+          </p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 stagger-children">
+          {featuredTools.map((tool, i) => (
+            <ToolCard tool={tool} delay={i * 60} />
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- All tools by category -->
+    <div class="border-t border-neutral-200 dark:border-neutral-800">
+      <CategoryGrid />
+    </div>
+
+    <!-- Privacy -->
+    <PrivacySection />
+
+    <!-- FAQ -->
+    <FAQ />
+  </main>
+
+  <Footer />
+</BaseLayout>
