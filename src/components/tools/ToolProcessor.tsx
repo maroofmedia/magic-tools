@@ -66,12 +66,12 @@ export default function ToolProcessor({ tool, processFiles, optionsRenderer, def
       setStatus('done');
       setProgress(100);
       // Fire toast
-      (window as any).__browsertools_toast?.({ type: 'success', title: 'Done!', message: successMessage });
+      (window as any).__magictools_toast?.({ type: 'success', title: 'Done!', message: successMessage });
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'An unexpected error occurred.';
       setErrorMessage(msg);
       setStatus('error');
-      (window as any).__browsertools_toast?.({ type: 'error', title: 'Processing failed', message: msg });
+      (window as any).__magictools_toast?.({ type: 'error', title: 'Processing failed', message: msg });
     }
   }, [files, options, processFiles]);
 

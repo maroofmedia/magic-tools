@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://browsertools.app/sitemap-index.xml
+Sitemap: https://magictools.app/sitemap-index.xml

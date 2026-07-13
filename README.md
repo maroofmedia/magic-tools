@@ -1,4 +1,4 @@
-# BrowserTools
+# Magic Tools
 
 > Free, open-source file utilities that work entirely in your browser.
 
@@ -37,8 +37,8 @@
 ### Installation
 
 ```bash
-git clone https://github.com/yourusername/browser-tools.git
-cd browser-tools
+git clone https://github.com/yourusername/magic-tools.git
+cd magic-tools
 npm install
 ```
 

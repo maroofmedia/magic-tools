@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────
-// BrowserTools — Master Tool Registry
+// Magic Tools — Master Tool Registry
 // Add new tools here; pages are auto-generated.
 // ─────────────────────────────────────────────
 

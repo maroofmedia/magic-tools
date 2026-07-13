@@ -102,7 +102,7 @@ export default function ToastContainer() {
 
   // Expose to global window so non-Preact code can trigger toasts
   useEffect(() => {
-    (window as any).__browsertools_toast = toast;
+    (window as any).__magictools_toast = toast;
   }, [toast]);
 
   return (
@@ -122,5 +122,5 @@ export default function ToastContainer() {
 
 /** Convenience function to trigger a toast from non-Preact code */
 export function fireToast(entry: Omit<ToastEntry, 'id'>) {
-  (window as any).__browsertools_toast?.(entry);
+  (window as any).__magictools_toast?.(entry);
 }

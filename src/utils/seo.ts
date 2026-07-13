@@ -2,8 +2,8 @@
 // SEO utilities
 // ─────────────────────────────────────────────
 
-export const SITE_NAME = 'BrowserTools';
-export const SITE_URL = 'https://browsertools.app';
+export const SITE_NAME = 'Magic Tools';
+export const SITE_URL = 'https://magictools.app';
 export const SITE_DESCRIPTION =
   'Free online file utilities that work entirely in your browser. Compress images, convert PDFs, crop photos, and more — no upload, no cloud, 100% private.';
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/og/default.png`;

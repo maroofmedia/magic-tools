@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────
-// BrowserTools — Master Type Definitions
+// Magic Tools — Master Type Definitions
 // ─────────────────────────────────────────────
 
 /** Categories available for tools */

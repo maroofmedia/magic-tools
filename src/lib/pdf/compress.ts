@@ -27,8 +27,8 @@ export async function compressPdf(
   pdfDoc.setAuthor('');
   pdfDoc.setSubject('');
   pdfDoc.setKeywords([]);
-  pdfDoc.setProducer('BrowserTools');
-  pdfDoc.setCreator('BrowserTools');
+  pdfDoc.setProducer('Magic Tools');
+  pdfDoc.setCreator('Magic Tools');
   onProgress(60);
 
   // Save with object stream compression
