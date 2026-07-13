@@ -4,14 +4,18 @@ import preact from '@astrojs/preact';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
+import cloudflare from '@astrojs/cloudflare';
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://magictools.app',
   output: 'static',
+
   integrations: [
     preact({ compat: true }),
     sitemap(),
   ],
+
   vite: {
     plugins: [tailwindcss()],
     optimizeDeps: {
@@ -30,4 +34,6 @@ export default defineConfig({
       },
     },
   },
+
+  adapter: cloudflare(),
 });

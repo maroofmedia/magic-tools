@@ -5,9 +5,14 @@
     "jsxImportSource": "preact",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": [
+        "src/*"
+      ]
     },
     "strictNullChecks": true,
     "noImplicitAny": true
-  }
+  },
+  "include": [
+    "./worker-configuration.d.ts"
+  ]
 }
