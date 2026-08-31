@@ -5,17 +5,29 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Header from '@/components/layout/Header.astro';
 import Footer from '@/components/layout/Footer.astro';
+import Breadcrumb from '@/components/common/Breadcrumb.astro';
 import PrivacySection from '@/components/home/PrivacySection.astro';
 import { SITE_DESCRIPTION } from '@/utils/seo';
 ---
 
 <BaseLayout
-  title="Privacy Policy"
-  description={SITE_DESCRIPTION}
+  title="Privacy Architecture"
+  description="How Magic Tools processes your files 100% locally in your browser with zero server uploads."
 >
   <Header />
 
-  <main id="main-content" class="min-h-screen pt-16 pb-16">
+  <main id="main-content" class="min-h-screen pt-16 flex-1">
+    <div class="border-b border-neutral-200 dark:border-neutral-800 bg-white/70 dark:bg-neutral-900/70">
+      <div class="container py-3">
+        <Breadcrumb
+          items={[
+            { label: 'Home', href: '/' },
+            { label: 'Privacy & Security' },
+          ]}
+        />
+      </div>
+    </div>
+
     <PrivacySection />
   </main>
 

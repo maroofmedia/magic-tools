@@ -1,39 +1,49 @@
 ---
 /**
- * Breadcrumb.astro — Accessible breadcrumb navigation
+ * Breadcrumb.astro — Navigation breadcrumb trail
  */
 interface BreadcrumbItem {
   label: string;
   href?: string;
 }
+
 interface Props {
   items: BreadcrumbItem[];
 }
+
 const { items } = Astro.props;
 ---
 
-<nav aria-label="Breadcrumb">
-  <ol class="flex flex-wrap items-center gap-1 text-sm text-neutral-500 dark:text-neutral-400">
-    {items.map((item, idx) => {
-      const isLast = idx === items.length - 1;
-      return (
-        <li class="flex items-center gap-1">
-          {idx > 0 && (
-            <svg class="w-3.5 h-3.5 text-neutral-400 dark:text-neutral-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-            </svg>
-          )}
-          {isLast ? (
-            <span class="text-neutral-900 dark:text-neutral-100 font-medium" aria-current="page">
-              {item.label}
-            </span>
-          ) : (
-            <a href={item.href} class="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors">
-              {item.label}
-            </a>
-          )}
-        </li>
-      );
-    })}
+<nav aria-label="Breadcrumb" class="flex items-center text-xs font-medium text-neutral-500 dark:text-neutral-400 overflow-x-auto py-1">
+  <ol class="flex items-center gap-1.5 min-w-max">
+    <!-- Home icon link -->
+    <li class="flex items-center">
+      <a href="/" class="flex items-center gap-1 hover:text-neutral-900 dark:hover:text-white transition-colors">
+        <svg class="w-3.5 h-3.5 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        <span class="sr-only">Home</span>
+      </a>
+    </li>
+
+    {items.map((item, index) => (
+      <li class="flex items-center gap-1.5">
+        <svg class="w-3 h-3 text-neutral-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+        {item.href && index < items.length - 1 ? (
+          <a
+            href={item.href}
+            class="hover:text-neutral-900 dark:hover:text-white transition-colors"
+          >
+            {item.label}
+          </a>
+        ) : (
+          <span class="text-neutral-900 dark:text-neutral-200 font-semibold truncate max-w-[200px] sm:max-w-xs" aria-current="page">
+            {item.label}
+          </span>
+        )}
+      </li>
+    ))}
   </ol>
 </nav>

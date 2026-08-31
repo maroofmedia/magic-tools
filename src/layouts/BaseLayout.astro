@@ -1,7 +1,7 @@
 ---
 /**
  * BaseLayout.astro
- * Root layout for all pages — handles SEO, dark mode init, and global styles.
+ * Root layout for all pages — handles SEO, dark mode init, and Jost/Inter typography.
  */
 import { buildTitle, SITE_NAME, SITE_URL, SITE_DESCRIPTION, DEFAULT_OG_IMAGE } from '@/utils/seo';
 import '@/styles/globals.css';
@@ -34,11 +34,11 @@ const canonicalUrl = canonical ?? (SITE_URL + Astro.url.pathname);
 <html lang="en" class="">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
 
     <!-- SEO -->
     <title>{pageTitle}</title>
@@ -61,28 +61,33 @@ const canonicalUrl = canonical ?? (SITE_URL + Astro.url.pathname);
     <meta name="twitter:image" content={ogImage} />
 
     <!-- Theme color -->
-    <meta name="theme-color" content="#6366f1" />
+    <meta name="theme-color" content="#4f46e5" />
 
-    <!-- Preconnect fonts -->
+    <!-- Preconnect Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Jost:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 
     <!-- JSON-LD -->
     {schema && <script type="application/ld+json" set:html={schema} />}
 
-    <!-- Dark mode initialisation — must run before paint to avoid flash -->
+    <!-- Dark mode initialisation — executes before first paint to prevent flash -->
     <script is:inline>
       (function () {
-        const stored = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (stored === 'dark' || (!stored && prefersDark)) {
-          document.documentElement.classList.add('dark');
-        }
+        try {
+          const stored = localStorage.getItem('theme');
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (stored === 'dark' || (!stored && prefersDark)) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
       })();
     </script>
   </head>
 
-  <body class="bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 transition-colors duration-200">
+  <body class="bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 min-h-screen flex flex-col font-sans selection:bg-brand-500/20">
     <slot />
   </body>
 </html>

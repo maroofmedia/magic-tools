@@ -1,41 +1,107 @@
 ---
 /**
- * CategoryGrid.astro — Category + tool grid sections on the homepage
+ * CategoryGrid.astro — Category sections & tool grid with interactive filter tabs
  */
 import ToolCard from './ToolCard.astro';
 import { TOOLS, CATEGORIES } from '@/utils/tools-config';
+
+const imageTools = TOOLS.filter((t) => t.category === 'image');
+const pdfTools = TOOLS.filter((t) => t.category === 'pdf');
 ---
 
-{CATEGORIES.map((cat) => {
-  const tools = TOOLS.filter((t) => t.category === cat.id);
-  return (
-    <section id={cat.id} class="section-padding scroll-mt-20">
-      <div class="container">
-        <!-- Section header -->
-        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+<section id="tools" class="section-padding scroll-mt-16">
+  <div class="container">
+    <!-- Header with interactive tabs -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-brand-50 dark:bg-brand-950/60 border border-brand-200/60 dark:border-brand-800/50 text-xs font-semibold text-brand-700 dark:text-brand-300 mb-3">
+          Instant Browser Tools
+        </div>
+        <h2 class="font-display text-3xl sm:text-4xl font-bold text-neutral-900 dark:text-white">
+          All File Utilities
+        </h2>
+        <p class="text-neutral-600 dark:text-neutral-400 mt-2 text-sm sm:text-base max-w-xl">
+          Select a tool below to begin processing. Everything runs in-memory on your CPU.
+        </p>
+      </div>
+
+      <!-- Quick Filter Navigation Tabs -->
+      <div class="flex flex-wrap items-center gap-1.5 bg-neutral-100 dark:bg-neutral-900 p-1.5 rounded-2xl border border-neutral-200/80 dark:border-neutral-800/80">
+        <a
+          href="#tools"
+          class="px-3.5 py-1.5 rounded-xl text-xs font-semibold text-neutral-900 dark:text-white bg-white dark:bg-neutral-800 shadow-2xs transition-all"
+        >
+          All ({TOOLS.length})
+        </a>
+        <a
+          href="#image"
+          class="px-3.5 py-1.5 rounded-xl text-xs font-semibold text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-all"
+        >
+          Image ({imageTools.length})
+        </a>
+        <a
+          href="#pdf"
+          class="px-3.5 py-1.5 rounded-xl text-xs font-semibold text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-all"
+        >
+          PDF ({pdfTools.length})
+        </a>
+      </div>
+    </div>
+
+    <!-- Image Tools Section -->
+    <div id="image" class="mb-14 scroll-mt-24">
+      <div class="flex items-center justify-between pb-4 mb-6 border-b border-neutral-200 dark:border-neutral-800">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center text-lg">
+            🖼️
+          </div>
           <div>
-            <div class="flex items-center gap-3 mb-2">
-              <span class="text-3xl" aria-hidden="true">{cat.icon}</span>
-              <h2 class="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-neutral-50">
-                {cat.label}
-              </h2>
-            </div>
-            <p class="text-neutral-600 dark:text-neutral-400 max-w-lg">
-              {cat.description}
+            <h3 class="font-display text-xl font-bold text-neutral-900 dark:text-white">
+              Image Tools
+            </h3>
+            <p class="text-xs text-neutral-500 dark:text-neutral-400">
+              Compression, conversion, cropping, and batch processing
             </p>
           </div>
-          <span class="flex-shrink-0 text-sm text-neutral-500 dark:text-neutral-400">
-            {tools.length} tool{tools.length !== 1 ? 's' : ''}
-          </span>
         </div>
-
-        <!-- Tool grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 stagger-children">
-          {tools.map((tool, i) => (
-            <ToolCard tool={tool} delay={i * 60} />
-          ))}
-        </div>
+        <span class="text-xs font-semibold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/50 px-2.5 py-1 rounded-full border border-purple-200/60 dark:border-purple-800/50">
+          {imageTools.length} tools
+        </span>
       </div>
-    </section>
-  );
-})}
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 stagger-children">
+        {imageTools.map((tool, i) => (
+          <ToolCard tool={tool} delay={i * 40} />
+        ))}
+      </div>
+    </div>
+
+    <!-- PDF Tools Section -->
+    <div id="pdf" class="scroll-mt-24">
+      <div class="flex items-center justify-between pb-4 mb-6 border-b border-neutral-200 dark:border-neutral-800">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center text-lg">
+            📄
+          </div>
+          <div>
+            <h3 class="font-display text-xl font-bold text-neutral-900 dark:text-white">
+              PDF Tools
+            </h3>
+            <p class="text-xs text-neutral-500 dark:text-neutral-400">
+              Merge, split, compress, and export PDF pages
+            </p>
+          </div>
+        </div>
+        <span class="text-xs font-semibold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/50 px-2.5 py-1 rounded-full border border-blue-200/60 dark:border-blue-800/50">
+          {pdfTools.length} tools
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 stagger-children">
+        {pdfTools.map((tool, i) => (
+          <ToolCard tool={tool} delay={i * 40} />
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

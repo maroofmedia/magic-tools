@@ -1,8 +1,8 @@
 /** @jsxImportSource preact */
 /**
- * DropZone.tsx — Drag & Drop file input with validation (Preact island)
+ * DropZone.tsx — Drag & Drop file input with clipboard paste & validation
  */
-import { useState, useRef, useCallback } from 'preact/hooks';
+import { useState, useRef, useCallback, useEffect } from 'preact/hooks';
 import { validateFileSize, validateFileType, formatBytes } from '@/utils/helpers';
 
 interface Props {
@@ -44,9 +44,9 @@ export default function DropZone({
     return null;
   }, [acceptedTypes, maxSizeMB, maxTotalSizeMB]);
 
-  const handleFiles = useCallback((rawFiles: FileList | null) => {
-    if (!rawFiles || rawFiles.length === 0) return;
-    const files = Array.from(rawFiles);
+  const handleFiles = useCallback((rawFiles: FileList | File[] | null) => {
+    if (!rawFiles || (rawFiles as any).length === 0) return;
+    const files = Array.from(rawFiles as any) as File[];
     const err = validate(files);
     if (err) {
       setError(err);
@@ -55,6 +55,27 @@ export default function DropZone({
     setError(null);
     onFilesSelected(multiFile ? files : [files[0]]);
   }, [validate, multiFile, onFilesSelected]);
+
+  // Support pasting image files directly from clipboard
+  useEffect(() => {
+    function handlePaste(e: ClipboardEvent) {
+      if (disabled) return;
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      const pastedFiles: File[] = [];
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].kind === 'file') {
+          const f = items[i].getAsFile();
+          if (f) pastedFiles.push(f);
+        }
+      }
+      if (pastedFiles.length > 0) {
+        handleFiles(pastedFiles);
+      }
+    }
+    window.addEventListener('paste', handlePaste);
+    return () => window.removeEventListener('paste', handlePaste);
+  }, [disabled, handleFiles]);
 
   function onDrop(e: DragEvent) {
     e.preventDefault();
@@ -89,45 +110,59 @@ export default function DropZone({
         role="button"
         tabIndex={disabled ? -1 : 0}
         aria-disabled={disabled}
-        aria-label={`Drop ${multiFile ? 'files' : 'a file'} here or click to browse`}
+        aria-label={`Drop ${multiFile ? 'files' : 'a file'} here or browse`}
         onClick={onClick}
         onKeyDown={onKeyDown}
         onDrop={onDrop}
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         class={[
-          'relative flex flex-col items-center justify-center gap-4 p-8 sm:p-12',
-          'rounded-2xl border-2 border-dashed transition-all duration-200 cursor-pointer',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500',
+          'group relative flex flex-col items-center justify-center gap-4 p-8 sm:p-14',
+          'rounded-3xl border-2 border-dashed transition-all duration-200 cursor-pointer text-center',
+          'bg-white/80 dark:bg-neutral-900/80 shadow-xs',
           isDragging
-            ? 'dropzone-active scale-[1.01]'
-            : 'border-neutral-300 dark:border-neutral-700 hover:border-brand-400 dark:hover:border-brand-500 hover:bg-neutral-50 dark:hover:bg-neutral-800/50',
+            ? 'dropzone-active scale-[1.01] border-brand-500'
+            : 'border-neutral-300 dark:border-neutral-700/80 hover:border-brand-500 dark:hover:border-brand-400 hover:bg-brand-50/20 dark:hover:bg-brand-950/20',
           disabled && 'opacity-50 cursor-not-allowed',
         ].filter(Boolean).join(' ')}
       >
-        {/* Upload icon */}
-        <div class={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-200 ${isDragging ? 'bg-brand-100 dark:bg-brand-900/50 scale-110' : 'bg-neutral-100 dark:bg-neutral-800'}`}>
-          <svg class={`w-7 h-7 transition-colors ${isDragging ? 'text-brand-600 dark:text-brand-400' : 'text-neutral-400'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+        {/* Icon Badge */}
+        <div class={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-300 ${isDragging ? 'bg-brand-600 text-white scale-110 shadow-lg shadow-brand-500/30' : 'bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 group-hover:scale-105'}`}>
+          <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"
               d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
           </svg>
         </div>
 
-        {/* Text */}
-        <div class="text-center">
-          <p class="text-base font-semibold text-neutral-900 dark:text-neutral-100">
-            {isDragging ? 'Drop to upload' : `Drop ${multiFile ? 'files' : 'a file'} here`}
+        {/* Typography & Instructions */}
+        <div class="space-y-1.5 max-w-sm">
+          <p class="font-display font-bold text-lg sm:text-xl text-neutral-900 dark:text-neutral-100">
+            {isDragging ? 'Drop files to upload' : `Choose ${multiFile ? 'files' : 'a file'} or drag & drop`}
           </p>
-          <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-            or{' '}
-            <span class="text-brand-600 dark:text-brand-400 font-medium underline underline-offset-2">
-              browse to choose
-            </span>
+          <p class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed">
+            Drag files directly here, or click to browse from your device
           </p>
-          <p class="mt-3 text-xs text-neutral-400 dark:text-neutral-500 font-mono">
-            {acceptedExtensions.join(' · ')} · Max {maxSizeMB} MB
-            {maxTotalSizeMB ? ` · Total max ${maxTotalSizeMB} MB` : ''}
-          </p>
+        </div>
+
+        {/* Action Button (Mobile & Desktop Friendly) */}
+        <button
+          type="button"
+          tabIndex={-1}
+          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-600 group-hover:bg-brand-700 text-white text-xs sm:text-sm font-semibold shadow-md shadow-brand-500/20 transition-all pointer-events-none"
+        >
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          <span>Select {multiFile ? 'Files' : 'File'}</span>
+        </button>
+
+        {/* Format Badges & Paste hint */}
+        <div class="pt-2 flex flex-wrap items-center justify-center gap-2 text-[11px] text-neutral-400 dark:text-neutral-500 font-mono">
+          <span>{acceptedExtensions.join(' · ')}</span>
+          <span>•</span>
+          <span>Max {maxSizeMB} MB</span>
+          <span class="hidden sm:inline">•</span>
+          <span class="hidden sm:inline text-neutral-500 dark:text-neutral-400">or Ctrl+V to paste</span>
         </div>
 
         {/* Hidden input */}
@@ -143,14 +178,14 @@ export default function DropZone({
         />
       </div>
 
-      {/* Error message */}
+      {/* Error Alert */}
       {error && (
-        <div role="alert" class="flex items-start gap-2.5 p-3.5 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/50 text-sm text-red-700 dark:text-red-400 animate-fade-in">
-          <svg class="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        <div role="alert" class="flex items-start gap-3 p-4 rounded-2xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800/60 text-xs sm:text-sm text-red-700 dark:text-red-300 animate-fade-in">
+          <svg class="w-4.5 h-4.5 flex-shrink-0 text-red-500 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
-          <span>{error}</span>
-          <button type="button" onClick={() => setError(null)} aria-label="Dismiss error" class="ml-auto text-red-400 hover:text-red-600 dark:hover:text-red-300">✕</button>
+          <span class="flex-1 font-medium">{error}</span>
+          <button type="button" onClick={() => setError(null)} aria-label="Dismiss error" class="text-red-400 hover:text-red-700 dark:hover:text-red-200">✕</button>
         </div>
       )}
     </div>
