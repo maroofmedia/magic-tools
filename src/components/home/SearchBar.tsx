@@ -91,13 +91,13 @@ export default function SearchBar() {
           onKeyDown={handleKeyDown}
           onFocus={() => query.trim() && setIsOpen(true)}
           onBlur={() => setTimeout(() => setIsOpen(false), 200)}
-          placeholder="Search tools (e.g. compress, convert, merge PDF, image to PDF)..."
+          placeholder="Search tools..."
           autocomplete="off"
           aria-label="Search tools"
           aria-expanded={isOpen}
           aria-haspopup="listbox"
           aria-activedescendant={activeIdx >= 0 ? `result-${activeIdx}` : undefined}
-          class="w-full pl-11 pr-16 py-2.5 sm:py-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 focus:border-brand-500 dark:focus:border-brand-400 focus:ring-3 focus:ring-brand-500/10 focus:outline-none shadow-2xs dark:shadow-neutral-950/40 text-sm transition-all duration-150"
+          class="w-full pl-10 pr-10 sm:pr-14 py-2.5 sm:py-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 focus:border-brand-500 dark:focus:border-brand-400 focus:ring-3 focus:ring-brand-500/10 focus:outline-none shadow-2xs dark:shadow-neutral-950/40 text-sm transition-all duration-150"
         />
 
         {/* Right action pills (Clear & Keyboard Shortcut) */}
