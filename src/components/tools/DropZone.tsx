@@ -117,9 +117,9 @@ export default function DropZone({
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         class={[
-          'group relative flex flex-col items-center justify-center gap-3 p-6 sm:p-9',
+          'group relative flex flex-col items-center justify-center gap-2.5 p-5 sm:p-8',
           'rounded-2xl border-2 border-dashed transition-all duration-150 cursor-pointer text-center',
-          'bg-white/80 dark:bg-neutral-900/80 shadow-2xs',
+          'bg-white/90 dark:bg-neutral-900/90 shadow-2xs',
           isDragging
             ? 'dropzone-active scale-[1.01] border-brand-500'
             : 'border-neutral-300 dark:border-neutral-700/80 hover:border-brand-500 dark:hover:border-brand-400 hover:bg-brand-50/20 dark:hover:bg-brand-950/20',
@@ -127,8 +127,8 @@ export default function DropZone({
         ].filter(Boolean).join(' ')}
       >
         {/* Icon Badge */}
-        <div class={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 ${isDragging ? 'bg-brand-600 text-white scale-105 shadow-md shadow-brand-500/30' : 'bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 group-hover:scale-105'}`}>
-          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        <div class={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center transition-all duration-200 ${isDragging ? 'bg-brand-600 text-white scale-105 shadow-md shadow-brand-500/30' : 'bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 group-hover:scale-105'}`}>
+          <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"
               d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
           </svg>

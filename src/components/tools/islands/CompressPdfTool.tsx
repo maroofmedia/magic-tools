@@ -16,17 +16,7 @@ export default function CompressPdfTool({ tool }: Props) {
       optionsRenderer={(_files, options, setOptions) => {
         const currentKB = (options.targetSizeKB as number) || 1024;
         return (
-          <div class="space-y-3.5">
-            {/* Simple User-Friendly Explanation */}
-            <div class="p-3 rounded-xl bg-neutral-50 dark:bg-neutral-800/60 border border-neutral-200/80 dark:border-neutral-700/60 text-xs text-neutral-600 dark:text-neutral-400">
-              <p class="font-semibold text-neutral-900 dark:text-neutral-100 mb-0.5">
-                ⚡ Make PDF Smaller
-              </p>
-              <p class="leading-relaxed">
-                Makes your PDF file smaller so it is easy to share, email, and upload.
-              </p>
-            </div>
-
+          <div class="space-y-3">
             {/* Desired Output Size */}
             <div>
               <div class="flex items-center justify-between mb-1.5">

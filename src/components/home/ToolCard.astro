@@ -29,21 +29,16 @@ const categoryBadge = tool.category === 'image'
   ]}
   style={delay ? `animation-delay: ${delay}ms` : undefined}
 >
-  <!-- Top row: Icon + Category Badge -->
-  <div class="flex items-center justify-between gap-2 mb-2.5">
+  <!-- Top row: Icon + Feature Badge -->
+  <div class="flex items-center justify-between gap-2 mb-2">
     <div class="w-9 h-9 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-lg shadow-2xs group-hover:scale-105 transition-transform duration-150">
       <span role="img" aria-label={tool.name}>{tool.icon}</span>
     </div>
-    <div class="flex items-center gap-1">
-      {tool.featured && (
-        <span class="text-[9px] uppercase tracking-wider font-bold px-1.5 py-0.2 rounded bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/50">
-          Popular
-        </span>
-      )}
-      <span class={`text-[9px] uppercase tracking-wider font-bold px-1.5 py-0.2 rounded border ${categoryBadge}`}>
-        {tool.category}
+    {tool.featured && (
+      <span class="text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/50">
+        Popular
       </span>
-    </div>
+    )}
   </div>
 
   <!-- Content -->
