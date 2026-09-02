@@ -9,13 +9,15 @@ export default defineConfig({
   output: 'static',
   integrations: [
     preact({ compat: true }),
-    sitemap(),
   ],
   vite: {
     plugins: [tailwindcss()],
     optimizeDeps: {
       include: ['pdf-lib', 'browser-image-compression', 'jszip'],
       exclude: ['pdfjs-dist'],
+    },
+    ssr: {
+      noExternal: ['pdf-lib', 'browser-image-compression', 'jszip'],
     },
     build: {
       rollupOptions: {

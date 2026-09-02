@@ -55,19 +55,19 @@ const categoryLabel = tool.category === 'image' ? 'Image Tools' : 'PDF Tools';
 
     <!-- Tool Header Banner -->
     <div class="border-b border-neutral-200/80 dark:border-neutral-800/80 bg-white/80 dark:bg-neutral-900/80">
-      <div class="container py-3 sm:py-5">
+      <div class="container py-4 sm:py-5">
         <div class="flex items-start gap-3 sm:gap-4">
-          <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-lg sm:text-2xl shadow-2xs flex-shrink-0 mt-0.5" role="img" aria-label={tool.name}>
+          <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-xl sm:text-2xl shadow-2xs flex-shrink-0 mt-0.5" role="img" aria-label={tool.name}>
             {tool.icon}
           </div>
           <div class="min-w-0 flex-1">
-            <div class="flex flex-wrap items-center gap-1.5 mb-0.5">
+            <div class="flex flex-wrap items-center gap-1.5 mb-1">
               <span class={`text-[9px] sm:text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded ${tool.category === 'image' ? 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200/60 dark:border-purple-800/50' : 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/50'}`}>
                 {tool.category} tool
               </span>
             </div>
 
-            <h1 class="font-display text-base sm:text-xl md:text-2xl font-bold text-neutral-900 dark:text-white tracking-tight">
+            <h1 class="font-display text-lg sm:text-xl md:text-2xl font-bold text-neutral-900 dark:text-white tracking-tight">
               {tool.name}
             </h1>
 
@@ -75,8 +75,8 @@ const categoryLabel = tool.category === 'image' ? 'Image Tools' : 'PDF Tools';
               {tool.longDescription}
             </p>
 
-            <!-- Accepted Formats & File Limit Pills -->
-            <div class="hidden sm:flex flex-wrap items-center gap-1 mt-2">
+            <!-- Formats & Limit Pills -->
+            <div class="flex flex-wrap items-center gap-1 mt-2">
               <span class="text-[11px] font-medium text-neutral-400 dark:text-neutral-500 mr-1">Formats:</span>
               {tool.acceptedExtensions.map((ext) => (
                 <span class="inline-flex items-center px-1.5 py-0.2 rounded text-[10px] font-mono font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border border-neutral-200/60 dark:border-neutral-700/60">
@@ -92,7 +92,7 @@ const categoryLabel = tool.category === 'image' ? 'Image Tools' : 'PDF Tools';
       </div>
     </div>
 
-    <!-- Tool Interactive Island Slot -->
+    <!-- Tool Interactive Workspace -->
     <div class="container py-4 sm:py-6 flex-1">
       <slot />
     </div>

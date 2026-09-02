@@ -1,7 +1,9 @@
 ---
 /**
- * Hero.astro — Compact homepage hero with simple language and quick jump pills
+ * Hero.astro — Vibrant homepage hero with integrated search and quick jump pills
  */
+import SearchBar from './SearchBar';
+
 const quickTools = [
   { name: 'Compress Image', href: '/tools/compress-image', icon: '🗜️' },
   { name: 'Compress PDF', href: '/tools/compress-pdf', icon: '🗜️' },
@@ -9,58 +11,44 @@ const quickTools = [
 ];
 ---
 
-<section class="relative overflow-hidden pt-20 pb-8 sm:pt-24 sm:pb-10">
-  <!-- Subtle ambient background glow -->
+<section class="relative pt-20 pb-10 sm:pt-24 sm:pb-14 border-b border-neutral-200/80 dark:border-neutral-800/80 bg-gradient-to-b from-brand-50/50 via-purple-50/20 to-white dark:from-brand-950/25 dark:via-purple-950/15 dark:to-neutral-950 overflow-hidden">
+  <!-- Colorful Ambient Glow Accents -->
   <div class="absolute inset-0 -z-10 pointer-events-none overflow-hidden" aria-hidden="true">
-    <div class="absolute -top-32 left-1/2 -translate-x-1/2 w-[550px] sm:w-[750px] h-[350px] bg-gradient-to-tr from-brand-500/15 via-purple-500/10 to-pink-500/5 dark:from-brand-500/10 dark:via-purple-500/10 dark:to-indigo-500/5 rounded-full blur-[90px]"></div>
+    <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-[600px] sm:w-[850px] h-[350px] bg-gradient-to-tr from-brand-500/20 via-purple-500/15 to-pink-500/15 dark:from-brand-500/15 dark:via-purple-500/15 dark:to-indigo-500/15 rounded-full blur-[90px]"></div>
   </div>
 
-  <div class="container text-center relative z-10">
+  <div class="container text-center max-w-3xl relative z-10">
     <!-- Top badge -->
-    <div class="animate-fade-in inline-flex items-center gap-2 px-3 py-1 mb-4 rounded-full bg-white/80 dark:bg-neutral-900/80 border border-neutral-200/90 dark:border-neutral-800/90 shadow-2xs text-xs font-medium text-neutral-700 dark:text-neutral-300 glass">
-      <span class="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
-      <span>Free online image and PDF tools</span>
+    <div class="inline-flex items-center gap-2 px-3 py-1 mb-4 rounded-full bg-white/90 dark:bg-neutral-900/90 border border-neutral-200/90 dark:border-neutral-800 shadow-2xs text-xs font-medium text-neutral-700 dark:text-neutral-300 glass">
+      <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+      <span>100% Free &amp; Client-Side File Tools</span>
     </div>
 
-    <!-- Main Headline with Jost font -->
-    <h1 class="animate-fade-in-up font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-neutral-900 dark:text-white leading-[1.12] max-w-3xl mx-auto mb-3.5">
-      Simple, fast file tools <br class="hidden sm:inline" />
-      <span class="gradient-text">for everyday use.</span>
+    <!-- Main Headline with Jost font & colorful gradient -->
+    <h1 class="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-neutral-900 dark:text-white leading-[1.15] mb-3">
+      Every tool you need for <br class="hidden sm:inline" />
+      <span class="gradient-text">PDFs &amp; images</span> in one place
     </h1>
 
-    <!-- Subtitle with simple, clear language -->
-    <p class="animate-fade-in-up text-sm sm:text-base md:text-lg text-neutral-600 dark:text-neutral-400 max-w-xl mx-auto mb-6 leading-relaxed font-normal">
-      Easily compress, convert, and merge your photos and PDF files. Works right in your browser with no account needed.
+    <!-- Subtitle -->
+    <p class="text-sm sm:text-base text-neutral-600 dark:text-neutral-400 max-w-xl mx-auto mb-6 leading-relaxed">
+      Merge, split, compress, and convert your files directly in your browser. Fast, private, and no files uploaded to any server.
     </p>
 
-    <!-- CTAs -->
-    <div class="animate-fade-in-up flex flex-wrap items-center justify-center gap-2.5 mb-6">
-      <a
-        href="#tools"
-        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm shadow-md shadow-brand-500/20 hover:shadow-brand-500/30 hover:-translate-y-0.5 transition-all duration-150"
-      >
-        <span>Browse All Tools</span>
-        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-        </svg>
-      </a>
-      <a
-        href="/privacy"
-        class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-50 dark:hover:bg-neutral-800/80 font-medium text-sm transition-all duration-150"
-      >
-        <span>Privacy & Security</span>
-      </a>
+    <!-- Integrated Search Bar -->
+    <div class="max-w-xl mx-auto mb-4">
+      <SearchBar client:load />
     </div>
 
-    <!-- Quick Tool Pills -->
-    <div class="animate-fade-in-up flex flex-wrap items-center justify-center gap-1.5 max-w-2xl mx-auto">
-      <span class="text-xs font-medium text-neutral-400 dark:text-neutral-500 mr-1">Popular:</span>
+    <!-- Quick Popular Pills -->
+    <div class="flex flex-wrap items-center justify-center gap-1.5 text-xs">
+      <span class="text-neutral-400 dark:text-neutral-500 mr-1 font-medium">Quick jump:</span>
       {quickTools.map((t) => (
         <a
           href={t.href}
-          class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/80 dark:bg-neutral-900/80 hover:bg-white dark:hover:bg-neutral-800 border border-neutral-200/80 dark:border-neutral-800/80 text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:text-brand-600 dark:hover:text-brand-400 shadow-2xs hover:shadow-xs transition-all duration-150"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/90 dark:bg-neutral-900/90 hover:bg-white dark:hover:bg-neutral-800 border border-neutral-200/80 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 font-medium transition-colors text-xs shadow-2xs"
         >
-          <span class="text-xs">{t.icon}</span>
+          <span>{t.icon}</span>
           <span>{t.name}</span>
         </a>
       ))}

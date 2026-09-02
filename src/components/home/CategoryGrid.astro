@@ -1,107 +1,52 @@
 ---
 /**
- * CategoryGrid.astro — Category sections & tool grid with interactive filter tabs
+ * CategoryGrid.astro — Clean, elegant tool grid by category
  */
 import ToolCard from './ToolCard.astro';
-import { TOOLS, CATEGORIES } from '@/utils/tools-config';
+import { TOOLS } from '@/utils/tools-config';
 
 const imageTools = TOOLS.filter((t) => t.category === 'image');
 const pdfTools = TOOLS.filter((t) => t.category === 'pdf');
 ---
 
-<section id="tools" class="section-padding scroll-mt-14">
-  <div class="container">
-    <!-- Header with interactive tabs -->
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6 sm:mb-8">
-      <div>
-        <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-brand-50 dark:bg-brand-950/60 border border-brand-200/60 dark:border-brand-800/50 text-xs font-semibold text-brand-700 dark:text-brand-300 mb-2">
-          Tools Collection
-        </div>
-        <h2 class="font-display text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white">
-          All File Tools
+<section id="tools" class="py-8 sm:py-12 scroll-mt-14">
+  <div class="container space-y-10 sm:space-y-12">
+
+    <!-- Image Tools -->
+    <div id="image" class="scroll-mt-20">
+      <div class="pb-3 mb-4 border-b border-neutral-200/80 dark:border-neutral-800/80">
+        <h2 class="font-display text-lg sm:text-xl font-bold text-neutral-900 dark:text-white">
+          Image Tools
         </h2>
-        <p class="text-neutral-600 dark:text-neutral-400 mt-1 text-xs sm:text-sm max-w-lg">
-          Select any tool below to start editing your files immediately.
+        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+          Compress, convert, and format photos
         </p>
       </div>
 
-      <!-- Quick Filter Navigation Tabs -->
-      <div class="flex flex-wrap items-center gap-1 bg-neutral-100 dark:bg-neutral-900 p-1 rounded-xl border border-neutral-200/80 dark:border-neutral-800/80">
-        <a
-          href="#tools"
-          class="px-3 py-1 rounded-lg text-xs font-semibold text-neutral-900 dark:text-white bg-white dark:bg-neutral-800 shadow-2xs transition-all"
-        >
-          All ({TOOLS.length})
-        </a>
-        <a
-          href="#image"
-          class="px-3 py-1 rounded-lg text-xs font-semibold text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-all"
-        >
-          Image Tools ({imageTools.length})
-        </a>
-        <a
-          href="#pdf"
-          class="px-3 py-1 rounded-lg text-xs font-semibold text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-all"
-        >
-          PDF Tools ({pdfTools.length})
-        </a>
-      </div>
-    </div>
-
-    <!-- Image Tools Section -->
-    <div id="image" class="mb-10 sm:mb-12 scroll-mt-20">
-      <div class="flex items-center justify-between pb-3 mb-4 border-b border-neutral-200 dark:border-neutral-800">
-        <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-md bg-purple-100 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center text-sm">
-            🖼️
-          </div>
-          <div>
-            <h3 class="font-display text-lg font-bold text-neutral-900 dark:text-white">
-              Image Tools
-            </h3>
-            <p class="text-[11px] text-neutral-500 dark:text-neutral-400">
-              Compress and convert your photos
-            </p>
-          </div>
-        </div>
-        <span class="text-xs font-semibold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-950/50 px-2 py-0.5 rounded-full border border-purple-200/60 dark:border-purple-800/50">
-          {imageTools.length} tools
-        </span>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 stagger-children">
-        {imageTools.map((tool, i) => (
-          <ToolCard tool={tool} delay={i * 30} />
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-3.5">
+        {imageTools.map((tool) => (
+          <ToolCard tool={tool} animate={false} />
         ))}
       </div>
     </div>
 
-    <!-- PDF Tools Section -->
+    <!-- PDF Tools -->
     <div id="pdf" class="scroll-mt-20">
-      <div class="flex items-center justify-between pb-3 mb-4 border-b border-neutral-200 dark:border-neutral-800">
-        <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-md bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center text-sm">
-            📄
-          </div>
-          <div>
-            <h3 class="font-display text-lg font-bold text-neutral-900 dark:text-white">
-              PDF Tools
-            </h3>
-            <p class="text-[11px] text-neutral-500 dark:text-neutral-400">
-              Merge, split, compress, and extract PDF pages
-            </p>
-          </div>
-        </div>
-        <span class="text-xs font-semibold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/50 px-2 py-0.5 rounded-full border border-blue-200/60 dark:border-blue-800/50">
-          {pdfTools.length} tools
-        </span>
+      <div class="pb-3 mb-4 border-b border-neutral-200/80 dark:border-neutral-800/80">
+        <h2 class="font-display text-lg sm:text-xl font-bold text-neutral-900 dark:text-white">
+          PDF Tools
+        </h2>
+        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+          Merge, split, compress, and convert PDF documents
+        </p>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 stagger-children">
-        {pdfTools.map((tool, i) => (
-          <ToolCard tool={tool} delay={i * 30} />
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-3.5">
+        {pdfTools.map((tool) => (
+          <ToolCard tool={tool} animate={false} />
         ))}
       </div>
     </div>
+
   </div>
 </section>

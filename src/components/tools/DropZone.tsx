@@ -117,52 +117,37 @@ export default function DropZone({
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         class={[
-          'group relative flex flex-col items-center justify-center gap-2.5 p-5 sm:p-8',
-          'rounded-2xl border-2 border-dashed transition-all duration-150 cursor-pointer text-center',
-          'bg-white/90 dark:bg-neutral-900/90 shadow-2xs',
+          'group relative flex flex-col items-center justify-center gap-3 p-8 sm:p-14',
+          'rounded-3xl border-2 border-dashed transition-all duration-200 cursor-pointer text-center',
+          'bg-white/90 dark:bg-neutral-900/90 shadow-sm',
           isDragging
             ? 'dropzone-active scale-[1.01] border-brand-500'
-            : 'border-neutral-300 dark:border-neutral-700/80 hover:border-brand-500 dark:hover:border-brand-400 hover:bg-brand-50/20 dark:hover:bg-brand-950/20',
+            : 'border-neutral-300 dark:border-neutral-700 hover:border-brand-500 dark:hover:border-brand-400 hover:bg-brand-50/10 dark:hover:bg-brand-950/10',
           disabled && 'opacity-50 cursor-not-allowed',
         ].filter(Boolean).join(' ')}
       >
-        {/* Icon Badge */}
-        <div class={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center transition-all duration-200 ${isDragging ? 'bg-brand-600 text-white scale-105 shadow-md shadow-brand-500/30' : 'bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 group-hover:scale-105'}`}>
-          <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"
-              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
-          </svg>
-        </div>
-
-        {/* Typography & Instructions */}
-        <div class="space-y-1 max-w-sm">
-          <p class="font-display font-semibold text-base sm:text-lg text-neutral-900 dark:text-neutral-100">
-            {isDragging ? 'Drop your file here' : `Choose ${multiFile ? 'files' : 'a file'} or drag here`}
-          </p>
-          <p class="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
-            Drag files directly here, or click to browse
-          </p>
-        </div>
-
-        {/* Action Button */}
+        {/* Prominent iLovePDF-style Select Button */}
         <button
           type="button"
           tabIndex={-1}
-          class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-brand-600 group-hover:bg-brand-700 text-white text-xs sm:text-sm font-semibold shadow-xs transition-all pointer-events-none"
+          class="inline-flex items-center gap-2.5 px-8 py-3.5 sm:py-4 rounded-2xl bg-brand-600 group-hover:bg-brand-700 text-white text-base sm:text-lg font-bold shadow-lg shadow-brand-500/25 group-hover:scale-105 transition-all pointer-events-none"
         >
-          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
           </svg>
           <span>Select {multiFile ? 'Files' : 'File'}</span>
         </button>
 
-        {/* Format Badges & Paste hint */}
+        {/* Drop subtitle */}
+        <p class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 font-medium">
+          {isDragging ? 'Drop your files now' : 'or drop files here'}
+        </p>
+
+        {/* Formats & Limit */}
         <div class="pt-1 flex flex-wrap items-center justify-center gap-2 text-[11px] text-neutral-400 dark:text-neutral-500 font-mono">
           <span>{acceptedExtensions.join(' · ')}</span>
           <span>•</span>
           <span>Max {maxSizeMB} MB</span>
-          <span class="hidden sm:inline">•</span>
-          <span class="hidden sm:inline text-neutral-500 dark:text-neutral-400">or Ctrl+V to paste</span>
         </div>
 
         {/* Hidden input */}
