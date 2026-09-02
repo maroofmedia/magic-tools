@@ -37,10 +37,10 @@ const categoryLabel = tool.category === 'image' ? 'Image Tools' : 'PDF Tools';
 >
   <Header />
 
-  <main id="main-content" class="min-h-screen pt-16 flex-1 flex flex-col">
+  <main id="main-content" class="min-h-screen pt-14 flex-1 flex flex-col">
     <!-- Breadcrumb bar -->
     <div class="border-b border-neutral-200/80 dark:border-neutral-800/80 bg-white/50 dark:bg-neutral-900/50 glass">
-      <div class="container py-2.5">
+      <div class="container py-2">
         <Breadcrumb
           items={[
             { label: 'Home', href: '/' },
@@ -53,38 +53,35 @@ const categoryLabel = tool.category === 'image' ? 'Image Tools' : 'PDF Tools';
 
     <!-- Tool Header Banner -->
     <div class="border-b border-neutral-200/80 dark:border-neutral-800/80 bg-white/80 dark:bg-neutral-900/80">
-      <div class="container py-8 sm:py-10">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-6">
-          <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-4xl sm:text-5xl shadow-sm flex-shrink-0" role="img" aria-label={tool.name}>
+      <div class="container py-3 sm:py-5">
+        <div class="flex items-start gap-3 sm:gap-4">
+          <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-lg sm:text-2xl shadow-2xs flex-shrink-0 mt-0.5" role="img" aria-label={tool.name}>
             {tool.icon}
           </div>
           <div class="min-w-0 flex-1">
-            <div class="flex flex-wrap items-center gap-2 mb-1.5">
-              <span class={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md ${tool.category === 'image' ? 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200/60 dark:border-purple-800/50' : 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/50'}`}>
-                {tool.category} utility
-              </span>
-              <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/50">
-                100% Client-Side
+            <div class="flex flex-wrap items-center gap-1.5 mb-0.5">
+              <span class={`text-[9px] sm:text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded ${tool.category === 'image' ? 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200/60 dark:border-purple-800/50' : 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/50'}`}>
+                {tool.category} tool
               </span>
             </div>
 
-            <h1 class="font-display text-2xl sm:text-3xl md:text-4xl font-extrabold text-neutral-900 dark:text-white tracking-tight">
+            <h1 class="font-display text-base sm:text-xl md:text-2xl font-bold text-neutral-900 dark:text-white tracking-tight">
               {tool.name}
             </h1>
 
-            <p class="mt-2 text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 max-w-2xl leading-relaxed">
+            <p class="mt-0.5 text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 max-w-2xl leading-snug sm:leading-relaxed">
               {tool.longDescription}
             </p>
 
             <!-- Accepted Formats & File Limit Pills -->
-            <div class="flex flex-wrap items-center gap-1.5 mt-3.5">
-              <span class="text-[11px] font-medium text-neutral-400 dark:text-neutral-500 mr-1">Accepts:</span>
+            <div class="hidden sm:flex flex-wrap items-center gap-1 mt-2">
+              <span class="text-[11px] font-medium text-neutral-400 dark:text-neutral-500 mr-1">Formats:</span>
               {tool.acceptedExtensions.map((ext) => (
-                <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-mono font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border border-neutral-200/60 dark:border-neutral-700/60">
+                <span class="inline-flex items-center px-1.5 py-0.2 rounded text-[10px] font-mono font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border border-neutral-200/60 dark:border-neutral-700/60">
                   {ext}
                 </span>
               ))}
-              <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-200/60 dark:border-neutral-700/60">
+              <span class="inline-flex items-center px-1.5 py-0.2 rounded text-[10px] font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-200/60 dark:border-neutral-700/60">
                 Max {tool.maxSizeMB} MB
               </span>
             </div>
@@ -94,25 +91,15 @@ const categoryLabel = tool.category === 'image' ? 'Image Tools' : 'PDF Tools';
     </div>
 
     <!-- Tool Interactive Island Slot -->
-    <div class="container py-8 sm:py-12 flex-1">
+    <div class="container py-5 sm:py-8 flex-1">
       <slot />
     </div>
 
     <!-- Bottom Privacy Assurance Banner -->
-    <div class="container pb-12">
-      <div class="flex items-center gap-3.5 p-4 sm:p-5 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-800/60 text-xs sm:text-sm text-emerald-900 dark:text-emerald-300 shadow-2xs">
-        <div class="w-8 h-8 rounded-xl bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 shadow-xs">
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
-              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-          </svg>
-        </div>
-        <div>
-          <strong class="font-semibold text-emerald-950 dark:text-emerald-200">100% In-Browser Privacy Guarantee:</strong>
-          <span class="text-emerald-800 dark:text-emerald-300/90 ml-1">
-            Your files are processed directly on your local device CPU. Zero bytes are uploaded to external servers.
-          </span>
-        </div>
+    <div class="container pb-8">
+      <div class="flex items-center gap-2.5 p-3 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/60 dark:border-emerald-800/50 text-xs text-emerald-900 dark:text-emerald-300">
+        <span class="text-sm">🔒</span>
+        <span><strong>Private & Secure:</strong> Your files stay on your device and are processed directly in your browser.</span>
       </div>
     </div>
   </main>

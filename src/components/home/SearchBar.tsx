@@ -91,28 +91,28 @@ export default function SearchBar() {
           onKeyDown={handleKeyDown}
           onFocus={() => query.trim() && setIsOpen(true)}
           onBlur={() => setTimeout(() => setIsOpen(false), 200)}
-          placeholder="Search 14 tools (e.g. compress, pdf, merge, jpg, crop)..."
+          placeholder="Search tools (e.g. compress, convert, merge PDF, image to PDF)..."
           autocomplete="off"
           aria-label="Search tools"
           aria-expanded={isOpen}
           aria-haspopup="listbox"
           aria-activedescendant={activeIdx >= 0 ? `result-${activeIdx}` : undefined}
-          class="w-full pl-12 pr-20 py-3.5 sm:py-4 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 focus:border-brand-500 dark:focus:border-brand-400 focus:ring-4 focus:ring-brand-500/10 focus:outline-none shadow-sm dark:shadow-neutral-950/40 text-sm sm:text-base transition-all duration-200"
+          class="w-full pl-11 pr-16 py-2.5 sm:py-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500 focus:border-brand-500 dark:focus:border-brand-400 focus:ring-3 focus:ring-brand-500/10 focus:outline-none shadow-2xs dark:shadow-neutral-950/40 text-sm transition-all duration-150"
         />
 
         {/* Right action pills (Clear & Keyboard Shortcut) */}
-        <div class="absolute right-3 flex items-center gap-1.5">
+        <div class="absolute right-2.5 flex items-center gap-1.5">
           {query ? (
             <button
               type="button"
               onClick={() => { setQuery(''); setIsOpen(false); inputRef.current?.focus(); }}
               aria-label="Clear search query"
-              class="w-6 h-6 flex items-center justify-center rounded-lg text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-xs"
+              class="w-5 h-5 flex items-center justify-center rounded-md text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-xs"
             >
               ✕
             </button>
           ) : (
-            <kbd class="hidden sm:inline-flex items-center px-2 py-0.5 text-[11px] font-mono font-medium text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/80 dark:border-neutral-700/60 rounded-md">
+            <kbd class="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono font-medium text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/80 dark:border-neutral-700/60 rounded">
               /
             </kbd>
           )}
@@ -126,12 +126,12 @@ export default function SearchBar() {
           id="search-results"
           role="listbox"
           aria-label="Search results"
-          class="absolute top-full left-0 right-0 mt-2 bg-white/95 dark:bg-neutral-900/95 border border-neutral-200 dark:border-neutral-800 rounded-2xl shadow-2xl glass overflow-hidden z-50 animate-scale-in max-h-96 overflow-y-auto"
+          class="absolute top-full left-0 right-0 mt-1.5 bg-white/95 dark:bg-neutral-900/95 border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-xl glass overflow-hidden z-50 animate-scale-in max-h-80 overflow-y-auto"
         >
           {results.length === 0 ? (
-            <li class="px-5 py-8 text-center text-neutral-500 dark:text-neutral-400 text-sm">
-              <p class="font-medium text-neutral-700 dark:text-neutral-300 mb-1">No tools matched "{query}"</p>
-              <p class="text-xs text-neutral-400">Try searching for "PDF", "image", "compress", or "convert".</p>
+            <li class="px-4 py-6 text-center text-neutral-500 dark:text-neutral-400 text-xs">
+              <p class="font-medium text-neutral-700 dark:text-neutral-300 mb-0.5">No tools found for "{query}"</p>
+              <p class="text-neutral-400">Try searching for "PDF", "image", "compress", or "convert".</p>
             </li>
           ) : (
             results.map((tool, idx) => (
@@ -144,19 +144,19 @@ export default function SearchBar() {
               >
                 <a
                   href={`/tools/${tool.slug}`}
-                  class={`flex items-center gap-3.5 px-4.5 py-3 transition-colors ${activeIdx === idx ? 'bg-brand-50 dark:bg-brand-950/60' : 'hover:bg-neutral-50 dark:hover:bg-neutral-800/60'}`}
+                  class={`flex items-center gap-3 px-3.5 py-2.5 transition-colors ${activeIdx === idx ? 'bg-brand-50 dark:bg-brand-950/60' : 'hover:bg-neutral-50 dark:hover:bg-neutral-800/60'}`}
                 >
-                  <span class="text-2xl flex-shrink-0 w-9 h-9 rounded-xl bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center" aria-hidden="true">
+                  <span class="text-lg flex-shrink-0 w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center" aria-hidden="true">
                     {tool.icon}
                   </span>
                   <div class="min-w-0 flex-1">
-                    <div class="flex items-center gap-2">
-                      <p class="text-sm font-semibold text-neutral-900 dark:text-neutral-100 truncate">{tool.name}</p>
-                      <span class={`text-[10px] font-semibold px-2 py-0.5 rounded-md uppercase tracking-wider ${tool.category === 'image' ? 'bg-purple-50 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 border border-purple-200/50 dark:border-purple-800/40' : 'bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 border border-blue-200/50 dark:border-blue-800/40'}`}>
+                    <div class="flex items-center gap-1.5">
+                      <p class="text-xs font-semibold text-neutral-900 dark:text-neutral-100 truncate">{tool.name}</p>
+                      <span class={`text-[9px] font-semibold px-1.5 py-0.2 rounded uppercase tracking-wider ${tool.category === 'image' ? 'bg-purple-50 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 border border-purple-200/50 dark:border-purple-800/40' : 'bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 border border-blue-200/50 dark:border-blue-800/40'}`}>
                         {tool.category}
                       </span>
                     </div>
-                    <p class="text-xs text-neutral-500 dark:text-neutral-400 truncate mt-0.5">{tool.description}</p>
+                    <p class="text-[11px] text-neutral-500 dark:text-neutral-400 truncate">{tool.description}</p>
                   </div>
                   <div class="flex items-center gap-1 flex-shrink-0">
                     {tool.acceptedExtensions.slice(0, 2).map(ext => (

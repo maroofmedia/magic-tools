@@ -2,16 +2,14 @@
  * PDF merge using pdf-lib (lazy-loaded)
  */
 import { formatBytes, fileToArrayBuffer } from '@/utils/helpers';
+import { PDFDocument } from 'pdf-lib';
 import type { ToolProcessResult } from '@/types/index';
 
 export async function mergePdfs(
   files: File[],
   onProgress: (pct: number) => void,
 ): Promise<ToolProcessResult> {
-  onProgress(5);
-
-  const { PDFDocument } = await import('pdf-lib');
-  onProgress(15);
+  onProgress(10);
 
   const mergedPdf = await PDFDocument.create();
   const step = 75 / files.length;

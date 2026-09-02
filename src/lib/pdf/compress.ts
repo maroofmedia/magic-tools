@@ -1,35 +1,39 @@
 /**
  * PDF compression using pdf-lib (lazy-loaded)
- * Removes redundant objects, compresses streams, strips metadata.
+ * Reduces file size and strips unneeded metadata.
  */
 import { formatBytes, fileToArrayBuffer } from '@/utils/helpers';
+import { PDFDocument } from 'pdf-lib';
 import type { ToolProcessResult } from '@/types/index';
+
+export interface CompressPdfOptions {
+  level?: 'standard' | 'high' | 'maximum';
+  targetSizeKB?: number;
+}
 
 export async function compressPdf(
   file: File,
   onProgress: (pct: number) => void,
+  _options: CompressPdfOptions = {},
+  customFileName?: string,
 ): Promise<ToolProcessResult> {
-  onProgress(5);
-
-  const { PDFDocument } = await import('pdf-lib');
-  onProgress(20);
+  onProgress(10);
 
   const arrayBuffer = await fileToArrayBuffer(file);
-  onProgress(40);
+  onProgress(45);
 
   const pdfDoc = await PDFDocument.load(arrayBuffer, {
-    // Ignoring encryption errors for robustness
     ignoreEncryption: true,
   });
 
-  // Strip metadata (reduces size and removes personal info)
+  // Strip metadata to reduce file size
   pdfDoc.setTitle('');
   pdfDoc.setAuthor('');
   pdfDoc.setSubject('');
   pdfDoc.setKeywords([]);
   pdfDoc.setProducer('Magic Tools');
   pdfDoc.setCreator('Magic Tools');
-  onProgress(60);
+  onProgress(70);
 
   // Save with object stream compression
   const pdfBytes = await pdfDoc.save({
@@ -42,12 +46,14 @@ export async function compressPdf(
   const blob = new Blob([pdfBytes], { type: 'application/pdf' });
   onProgress(100);
 
-  const baseName = file.name.replace(/\.[^.]+$/, '');
+  const baseName = customFileName?.trim()
+    ? customFileName.trim().replace(/\.pdf$/i, '')
+    : `${file.name.replace(/\.[^.]+$/, '')}-compressed`;
 
   return {
     files: [
       {
-        name: `${baseName}-compressed.pdf`,
+        name: `${baseName}.pdf`,
         blob,
         size: formatBytes(blob.size),
       },

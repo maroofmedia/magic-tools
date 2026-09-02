@@ -10,46 +10,39 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="border-t border-neutral-200 dark:border-neutral-800/80 bg-white dark:bg-neutral-900/60 transition-colors duration-200">
-  <div class="container py-12 sm:py-16">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
+  <div class="container py-8 sm:py-10">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
 
       <!-- Brand Column -->
-      <div class="sm:col-span-2 lg:col-span-1 space-y-4">
-        <a href="/" class="flex items-center gap-2.5 group" aria-label="Magic Tools">
-          <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-brand-600 to-purple-600 flex items-center justify-center shadow-sm">
-            <svg class="w-4.5 h-4.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+      <div class="sm:col-span-2 lg:col-span-1 space-y-3">
+        <a href="/" class="flex items-center gap-2 group" aria-label="Magic Tools">
+          <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-600 to-purple-600 flex items-center justify-center shadow-xs">
+            <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
                 d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/>
             </svg>
           </div>
-          <span class="font-display font-bold text-neutral-900 dark:text-white text-xl">
+          <span class="font-display font-bold text-neutral-900 dark:text-white text-lg">
             Magic<span class="text-brand-600 dark:text-brand-400">Tools</span>
           </span>
         </a>
 
-        <p class="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed max-w-sm">
-          Ultra-fast, 100% private file utilities engineered to run purely inside your web browser. Zero server uploads, zero accounts, no tracking.
+        <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed max-w-sm">
+          Free, simple file tools to compress, convert, and edit your images and PDFs directly in your browser.
         </p>
-
-        <div class="pt-2">
-          <span class="inline-flex items-center gap-2 text-xs font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200/80 dark:border-emerald-800/60 px-3 py-1.5 rounded-full">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
-            Zero Cloud Uploads · 100% Local
-          </span>
-        </div>
       </div>
 
       <!-- Image Tools Column -->
       <div>
-        <h3 class="font-display font-semibold text-sm uppercase tracking-wider text-neutral-900 dark:text-white mb-4">
-          Image Utilities
+        <h3 class="font-display font-semibold text-xs uppercase tracking-wider text-neutral-900 dark:text-white mb-3">
+          Image Tools
         </h3>
-        <ul class="space-y-2.5">
+        <ul class="space-y-1.5">
           {imageTools.map((tool) => (
             <li>
               <a
                 href={`/tools/${tool.slug}`}
-                class="text-sm text-neutral-600 dark:text-neutral-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors inline-flex items-center gap-1.5"
+                class="text-xs text-neutral-600 dark:text-neutral-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors inline-flex items-center gap-1.5"
               >
                 <span>{tool.name}</span>
               </a>
@@ -60,15 +53,15 @@ const year = new Date().getFullYear();
 
       <!-- PDF Tools Column -->
       <div>
-        <h3 class="font-display font-semibold text-sm uppercase tracking-wider text-neutral-900 dark:text-white mb-4">
-          PDF Utilities
+        <h3 class="font-display font-semibold text-xs uppercase tracking-wider text-neutral-900 dark:text-white mb-3">
+          PDF Tools
         </h3>
-        <ul class="space-y-2.5">
+        <ul class="space-y-1.5">
           {pdfTools.map((tool) => (
             <li>
               <a
                 href={`/tools/${tool.slug}`}
-                class="text-sm text-neutral-600 dark:text-neutral-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+                class="text-xs text-neutral-600 dark:text-neutral-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
               >
                 {tool.name}
               </a>
@@ -79,36 +72,23 @@ const year = new Date().getFullYear();
 
       <!-- Information Column -->
       <div>
-        <h3 class="font-display font-semibold text-sm uppercase tracking-wider text-neutral-900 dark:text-white mb-4">
-          Security & Info
+        <h3 class="font-display font-semibold text-xs uppercase tracking-wider text-neutral-900 dark:text-white mb-3">
+          Information
         </h3>
-        <ul class="space-y-2.5">
+        <ul class="space-y-1.5">
           <li>
-            <a href="/privacy" class="text-sm text-neutral-600 dark:text-neutral-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
-              Privacy & Security Architecture
+            <a href="/privacy" class="text-xs text-neutral-600 dark:text-neutral-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
+              Privacy & Security
             </a>
           </li>
           <li>
-            <a href="/#faq" class="text-sm text-neutral-600 dark:text-neutral-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
-              FAQ & Browser Support
+            <a href="/#faq" class="text-xs text-neutral-600 dark:text-neutral-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
+              FAQ
             </a>
           </li>
           <li>
-            <a href="/#tools" class="text-sm text-neutral-600 dark:text-neutral-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
-              All 14 File Tools
-            </a>
-          </li>
-          <li>
-            <a
-              href="https://github.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-sm text-neutral-600 dark:text-neutral-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors inline-flex items-center gap-1"
-            >
-              <span>GitHub Repository</span>
-              <svg class="w-3.5 h-3.5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
+            <a href="/#tools" class="text-xs text-neutral-600 dark:text-neutral-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
+              All Tools
             </a>
           </li>
         </ul>
@@ -117,16 +97,16 @@ const year = new Date().getFullYear();
     </div>
 
     <!-- Bottom Credits -->
-    <div class="mt-12 pt-8 border-t border-neutral-200/80 dark:border-neutral-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-500 dark:text-neutral-400">
+    <div class="mt-8 pt-5 border-t border-neutral-200/80 dark:border-neutral-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-neutral-500 dark:text-neutral-400">
       <p>
-        © {year} <span class="font-semibold text-neutral-800 dark:text-neutral-200">Magic Tools</span>. Built for privacy, speed, and simplicity.
+        © {year} <span class="font-semibold text-neutral-800 dark:text-neutral-200">Magic Tools</span>. Free online tools for images and PDFs.
       </p>
-      <div class="flex items-center gap-6">
-        <span>No Analytics</span>
+      <div class="flex items-center gap-4 text-[11px] text-neutral-400">
+        <span>Fast</span>
         <span>•</span>
-        <span>No Cookies</span>
+        <span>Free</span>
         <span>•</span>
-        <span>Client-Side Only</span>
+        <span>Private</span>
       </div>
     </div>
   </div>

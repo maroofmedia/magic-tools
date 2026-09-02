@@ -158,3 +158,15 @@ export async function createZip(
   }
   return zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
 }
+
+/**
+ * Format target size into friendly units.
+ * Shows in KB below 1024 KB, then shows in MB.
+ */
+export function formatTargetSize(sizeKB: number): string {
+  if (sizeKB < 1024) {
+    return `${Math.round(sizeKB)} KB`;
+  }
+  const mb = sizeKB / 1024;
+  return `${Number.isInteger(mb) ? mb : parseFloat(mb.toFixed(1))} MB`;
+}

@@ -11,57 +11,26 @@ export const TOOLS: ToolConfig[] = [
   {
     slug: 'compress-image',
     name: 'Compress Image',
-    description: 'Reduce image file size while preserving quality.',
+    description: 'Reduce image file size while keeping good quality.',
     longDescription:
-      'Compress JPEG, PNG, and WebP images directly in your browser. Choose your target quality level and get an optimised file in seconds — no upload, no cloud, no waiting.',
+      'Shrink single or multiple JPEG, PNG, or WebP images in seconds. Pick your target size and save storage easily.',
     category: 'image',
     icon: '🗜️',
-    acceptedTypes: ['image/jpeg', 'image/png', 'image/webp'],
-    acceptedExtensions: ['.jpg', '.jpeg', '.png', '.webp'],
-    multiFile: false,
-    maxSizeMB: 50,
-    metaDescription:
-      'Compress JPEG, PNG and WebP images in your browser for free. No upload required — 100% private.',
-    featured: true,
-  },
-  {
-    slug: 'batch-compress',
-    name: 'Batch Image Compression',
-    description: 'Compress multiple images at once with one click.',
-    longDescription:
-      'Upload up to 20 images and compress them all simultaneously. Perfect for optimising a photo gallery or website assets before shipping.',
-    category: 'image',
-    icon: '📦',
     acceptedTypes: ['image/jpeg', 'image/png', 'image/webp'],
     acceptedExtensions: ['.jpg', '.jpeg', '.png', '.webp'],
     multiFile: true,
     maxSizeMB: 50,
     maxTotalSizeMB: 500,
     metaDescription:
-      'Batch compress multiple images at once — JPEG, PNG, WebP. Free, private, browser-only.',
+      'Compress JPEG, PNG, and WebP images online for free without losing quality.',
     featured: true,
-  },
-  {
-    slug: 'crop-image',
-    name: 'Crop Image',
-    description: 'Crop and resize images with an interactive canvas.',
-    longDescription:
-      'Drag the crop handles to select your desired region. Choose a free-form crop or lock to a preset aspect ratio (1:1, 16:9, 4:3, and more). Download the result as JPEG or PNG.',
-    category: 'image',
-    icon: '✂️',
-    acceptedTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
-    acceptedExtensions: ['.jpg', '.jpeg', '.png', '.webp', '.gif'],
-    multiFile: false,
-    maxSizeMB: 20,
-    metaDescription:
-      'Crop and resize images online — free, no upload, fully private. Supports JPEG, PNG, WebP.',
   },
   {
     slug: 'jpg-to-png',
     name: 'JPG to PNG',
-    description: 'Convert JPEG images to lossless PNG format.',
+    description: 'Convert JPG photos to PNG format.',
     longDescription:
-      'Convert a JPEG photo to PNG without any quality loss from re-encoding. Ideal when you need a transparent-background version or a lossless archive copy.',
+      'Convert JPG images into high quality PNG files instantly.',
     category: 'image',
     icon: '🖼️',
     acceptedTypes: ['image/jpeg'],
@@ -69,15 +38,15 @@ export const TOOLS: ToolConfig[] = [
     multiFile: false,
     maxSizeMB: 50,
     metaDescription:
-      'Convert JPG to PNG online — free, instant, browser-only. No account, no upload.',
+      'Convert JPG pictures to PNG format online for free.',
     featured: true,
   },
   {
     slug: 'png-to-jpg',
     name: 'PNG to JPG',
-    description: 'Convert PNG images to JPEG to reduce file size.',
+    description: 'Convert PNG images to JPG to reduce file size.',
     longDescription:
-      'Convert PNG images to JPEG in seconds. Set the quality level to balance file size and visual fidelity. Great for web photos that don\'t need transparency.',
+      'Convert PNG images to JPG format and adjust quality to save storage space.',
     category: 'image',
     icon: '🔄',
     acceptedTypes: ['image/png'],
@@ -85,14 +54,14 @@ export const TOOLS: ToolConfig[] = [
     multiFile: false,
     maxSizeMB: 50,
     metaDescription:
-      'Convert PNG to JPG online — free, private, no upload. Adjust quality and download instantly.',
+      'Convert PNG images to JPG format online for free with adjustable quality.',
   },
   {
     slug: 'convert-to-webp',
     name: 'Convert to WebP',
-    description: 'Convert images to the modern WebP format.',
+    description: 'Convert images to the lightweight WebP format.',
     longDescription:
-      'WebP images are typically 25–35% smaller than equivalent JPEG or PNG files. Convert any JPEG, PNG, or GIF to WebP for faster page loads.',
+      'WebP images are smaller and faster to load. Convert your JPG, PNG, or GIF files to WebP easily.',
     category: 'image',
     icon: '⚡',
     acceptedTypes: ['image/jpeg', 'image/png', 'image/gif'],
@@ -100,7 +69,7 @@ export const TOOLS: ToolConfig[] = [
     multiFile: false,
     maxSizeMB: 50,
     metaDescription:
-      'Convert JPEG, PNG or GIF to WebP format free — browser-only, private, instant download.',
+      'Convert JPG, PNG, or GIF pictures to modern WebP format online for free.',
     featured: true,
   },
   {
@@ -108,7 +77,7 @@ export const TOOLS: ToolConfig[] = [
     name: 'WebP to PNG',
     description: 'Convert WebP images to PNG format.',
     longDescription:
-      'Need your WebP file as a PNG for compatibility with older apps or editors? Convert it here — instantly, in your browser, with no quality loss.',
+      'Convert WebP images back to PNG format so they can be opened in any photo viewer or editor.',
     category: 'image',
     icon: '📷',
     acceptedTypes: ['image/webp'],
@@ -116,14 +85,14 @@ export const TOOLS: ToolConfig[] = [
     multiFile: false,
     maxSizeMB: 50,
     metaDescription:
-      'Convert WebP to PNG online free — instant, private, no upload required.',
+      'Convert WebP files to PNG images online for free with full quality.',
   },
   {
     slug: 'webp-to-jpg',
     name: 'WebP to JPG',
-    description: 'Convert WebP images to JPEG format.',
+    description: 'Convert WebP images to JPG format.',
     longDescription:
-      'Convert your WebP images to JPEG for maximum compatibility. Adjust quality to control the output file size.',
+      'Convert WebP files to JPG photos for easy sharing and broad device compatibility.',
     category: 'image',
     icon: '🔃',
     acceptedTypes: ['image/webp'],
@@ -131,14 +100,14 @@ export const TOOLS: ToolConfig[] = [
     multiFile: false,
     maxSizeMB: 50,
     metaDescription:
-      'Convert WebP to JPG online free — browser-only, instant, no signup.',
+      'Convert WebP files to JPG photos online for free.',
   },
   {
     slug: 'convert-avif',
     name: 'Convert to AVIF',
-    description: 'Convert images to the next-gen AVIF format.',
+    description: 'Convert images to the ultra-efficient AVIF format.',
     longDescription:
-      'AVIF offers superior compression compared to WebP and JPEG, typically 50% smaller. Convert your images to AVIF for the most efficient web delivery. Note: AVIF encoding requires a modern browser (Chrome 94+, Firefox 113+).',
+      'AVIF offers very small file sizes with crisp image quality. Convert your photos to AVIF easily.',
     category: 'image',
     icon: '🚀',
     acceptedTypes: ['image/jpeg', 'image/png', 'image/webp'],
@@ -146,14 +115,14 @@ export const TOOLS: ToolConfig[] = [
     multiFile: false,
     maxSizeMB: 50,
     metaDescription:
-      'Convert images to AVIF format free — browser-only, private, superior compression.',
+      'Convert images to next-generation AVIF format online for free.',
   },
   {
     slug: 'image-to-pdf',
     name: 'Image to PDF',
-    description: 'Convert one or more images into a single PDF.',
+    description: 'Turn one or more photos into a PDF document.',
     longDescription:
-      'Turn JPEG, PNG, or WebP images into a professional PDF document. Upload multiple images and they will be placed on separate pages in order.',
+      'Combine multiple photos into a single, organized PDF document ready for printing or sharing.',
     category: 'image',
     icon: '📄',
     acceptedTypes: ['image/jpeg', 'image/png', 'image/webp'],
@@ -162,7 +131,7 @@ export const TOOLS: ToolConfig[] = [
     maxSizeMB: 50,
     maxTotalSizeMB: 200,
     metaDescription:
-      'Convert images to PDF online free — JPEG, PNG, WebP. Browser-only, no upload.',
+      'Convert JPG and PNG photos into a clean PDF document online for free.',
     featured: true,
   },
 
@@ -171,9 +140,9 @@ export const TOOLS: ToolConfig[] = [
   {
     slug: 'merge-pdf',
     name: 'Merge PDF',
-    description: 'Combine multiple PDFs into one document.',
+    description: 'Combine multiple PDF files into one document.',
     longDescription:
-      'Drag and drop multiple PDF files and merge them into a single document. Reorder pages before merging. Everything happens locally — your files never leave your device.',
+      'Add multiple PDF documents and combine them into a single file. You can rearrange the order before merging.',
     category: 'pdf',
     icon: '📋',
     acceptedTypes: ['application/pdf'],
@@ -182,15 +151,15 @@ export const TOOLS: ToolConfig[] = [
     maxSizeMB: 100,
     maxTotalSizeMB: 500,
     metaDescription:
-      'Merge PDF files online free — combine multiple PDFs into one. No upload, 100% private.',
+      'Combine and merge multiple PDF documents into one file online for free.',
     featured: true,
   },
   {
     slug: 'split-pdf',
     name: 'Split PDF',
-    description: 'Extract pages or split a PDF into separate files.',
+    description: 'Separate pages or split a PDF into parts.',
     longDescription:
-      'Split a PDF by page ranges or extract individual pages. You can download each split section separately or all at once as a ZIP. No page limits.',
+      'Extract individual pages or divide your PDF file into separate documents with ease.',
     category: 'pdf',
     icon: '✂️',
     acceptedTypes: ['application/pdf'],
@@ -198,15 +167,15 @@ export const TOOLS: ToolConfig[] = [
     multiFile: false,
     maxSizeMB: 100,
     metaDescription:
-      'Split PDF online free — extract pages or split into multiple files. Browser-only, private.',
+      'Split PDF documents and extract specific pages online for free.',
     featured: true,
   },
   {
     slug: 'compress-pdf',
     name: 'Compress PDF',
-    description: 'Reduce PDF file size without losing quality.',
+    description: 'Reduce PDF file size for easier sharing.',
     longDescription:
-      'Optimise your PDF by removing redundant objects and compressing content streams. The result is a smaller, faster PDF that\'s easier to share.',
+      'Make your PDF files smaller so they are easier to send via email or upload to websites.',
     category: 'pdf',
     icon: '🗜️',
     acceptedTypes: ['application/pdf'],
@@ -214,14 +183,14 @@ export const TOOLS: ToolConfig[] = [
     multiFile: false,
     maxSizeMB: 100,
     metaDescription:
-      'Compress PDF online free — reduce PDF size browser-side. No upload, fully private.',
+      'Reduce PDF file size online for free while keeping text and images clear.',
   },
   {
     slug: 'pdf-to-images',
     name: 'PDF to Images',
-    description: 'Convert PDF pages to JPG or PNG images.',
+    description: 'Convert PDF pages into JPG or PNG images.',
     longDescription:
-      'Render every page of a PDF as a high-quality image. Choose JPEG or PNG output, set the resolution (DPI), and download each page individually or as a ZIP.',
+      'Turn every page of your PDF into clear photos. Download individual pages or all pages together.',
     category: 'pdf',
     icon: '🖼️',
     acceptedTypes: ['application/pdf'],
@@ -229,7 +198,7 @@ export const TOOLS: ToolConfig[] = [
     multiFile: false,
     maxSizeMB: 100,
     metaDescription:
-      'Convert PDF to images online free — extract pages as JPEG or PNG. Browser-only, private.',
+      'Convert PDF pages to high-quality JPG or PNG images online for free.',
   },
 ];
 
@@ -254,12 +223,12 @@ export const CATEGORIES: { id: ToolCategory; label: string; icon: string; descri
     id: 'image',
     label: 'Image Tools',
     icon: '🖼️',
-    description: 'Compress, convert, crop, and transform images — entirely in your browser.',
+    description: 'Compress and convert your photos easily.',
   },
   {
     id: 'pdf',
     label: 'PDF Tools',
     icon: '📄',
-    description: 'Merge, split, compress, and convert PDF files — no upload required.',
+    description: 'Merge, split, compress, and convert PDF documents.',
   },
 ];

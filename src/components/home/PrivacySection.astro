@@ -1,132 +1,93 @@
 ---
 /**
- * PrivacySection.astro — Privacy & Security architecture explainer
+ * PrivacySection.astro — Simple, friendly privacy & security explainer
  */
-const privacyPillars = [
+const simpleBenefits = [
   {
-    icon: '🛡️',
-    title: 'Zero Server Uploads',
-    description: 'Your files never touch any external server, cloud storage, or third-party API. All computations occur within your device memory.',
+    icon: '🔒',
+    title: 'Never Uploaded',
+    description: 'Your files never leave your phone or computer. Everything stays on your device.',
   },
   {
     icon: '⚡',
-    title: 'Native Browser Speed',
-    description: 'Powered by HTML5 Canvas, Web Workers, and WebAssembly, processing happens at full CPU speed without network latency.',
+    title: 'Fast & Instant',
+    description: 'No waiting for files to upload or download from a server. Processing is immediate.',
   },
   {
-    icon: '🗑️',
-    title: 'Instant Memory Cleanup',
-    description: 'Blobs and canvas buffers are immediately dereferenced and garbage collected once your task is completed.',
+    icon: '📱',
+    title: 'Works on All Devices',
+    description: 'Use it on your iPhone, Android, laptop, or desktop without installing any apps.',
   },
   {
-    icon: '🚫',
-    title: 'No Tracking or Telemetry',
-    description: 'We do not run tracking scripts, Google Analytics, cookies, or telemetry. What you process remains entirely yours.',
-  },
-  {
-    icon: '✈️',
-    title: 'Works Completely Offline',
-    description: 'Disconnect your Wi-Fi or turn on Airplane mode — the tools continue processing locally without an internet connection.',
-  },
-  {
-    icon: '🔍',
-    title: 'Open Source & Auditable',
-    description: 'Every line of JavaScript and WebAssembly integration is completely open and auditable for security researchers.',
+    icon: '🆓',
+    title: 'Free Forever',
+    description: 'No account needed, no hidden fees, and no file quantity restrictions.',
   },
 ];
 
-const workflowSteps = [
+const simpleSteps = [
   {
-    step: '01',
-    title: 'File Selection',
-    description: 'File is read into your browser memory via the native HTML5 File API.',
-    badge: 'Local Memory',
+    step: '1',
+    title: 'Choose Your File',
+    description: 'Select an image or PDF from your device.',
   },
   {
-    step: '02',
-    title: 'Local Processing',
-    description: 'Canvas API and PDF engine execute the transformation directly on your CPU.',
-    badge: 'Client CPU',
+    step: '2',
+    title: 'Instant Processing',
+    description: 'Your browser modifies the file directly.',
   },
   {
-    step: '03',
-    title: 'Direct Download',
-    description: 'Result is generated as a local Object URL and downloaded straight to disk.',
-    badge: 'Instant Save',
+    step: '3',
+    title: 'Save to Device',
+    description: 'Download your finished file with one click.',
   },
 ];
 ---
 
-<section id="privacy" class="section-padding bg-neutral-900 text-white relative overflow-hidden scroll-mt-16">
+<section id="privacy" class="section-padding bg-neutral-50/70 dark:bg-neutral-950 text-neutral-900 dark:text-white relative overflow-hidden scroll-mt-14 border-y border-neutral-200/70 dark:border-neutral-800/80">
   <!-- Subtle ambient glow -->
-  <div class="absolute top-0 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
-  <div class="absolute bottom-0 left-1/4 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+  <div class="absolute top-0 right-1/4 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+  <div class="absolute bottom-0 left-1/4 w-72 h-72 bg-brand-500/10 rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
 
   <div class="container relative z-10">
     <!-- Header -->
-    <div class="text-center max-w-3xl mx-auto mb-14">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 mb-4 rounded-full bg-emerald-950/70 border border-emerald-700/60 text-emerald-300 text-xs font-semibold">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        Privacy & Security Architecture
+    <div class="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
+      <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 mb-2.5 rounded-full bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200/80 dark:border-emerald-700/60 text-emerald-700 dark:text-emerald-300 text-xs font-medium">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+        <span>Privacy & Security</span>
       </div>
-      <h2 class="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
-        Your files never leave <span class="text-emerald-400">your device</span>.
+      <h2 class="font-display text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-neutral-900 dark:text-white mb-2.5">
+        Your files stay on <span class="text-emerald-600 dark:text-emerald-400">your device</span>.
       </h2>
-      <p class="text-neutral-400 text-sm sm:text-base leading-relaxed">
-        Unlike traditional online file converters that upload your documents to remote cloud servers, Magic Tools executes 100% of operations locally in your browser.
+      <p class="text-neutral-600 dark:text-neutral-400 text-xs sm:text-sm leading-relaxed">
+        Unlike other tools that upload your documents to the cloud, Magic Tools processes your files directly in your web browser.
       </p>
     </div>
 
-    <!-- Step-by-Step Architecture Flow -->
-    <div class="mb-16">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
-        {workflowSteps.map(({ step, title, description, badge }) => (
-          <div class="p-6 rounded-2xl bg-neutral-800/60 border border-neutral-700/60 relative flex flex-col justify-between">
-            <div>
-              <div class="flex items-center justify-between mb-4">
-                <span class="font-mono font-bold text-2xl text-emerald-400/80">{step}</span>
-                <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-neutral-700 text-neutral-300">
-                  {badge}
-                </span>
-              </div>
-              <h3 class="font-display text-lg font-bold text-white mb-2">{title}</h3>
-              <p class="text-xs sm:text-sm text-neutral-400 leading-relaxed">{description}</p>
-            </div>
+    <!-- 3 Simple Steps -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5 mb-8">
+      {simpleSteps.map(({ step, title, description }) => (
+        <div class="p-4 rounded-xl bg-white dark:bg-neutral-900/80 border border-neutral-200/80 dark:border-neutral-800/80 shadow-2xs flex items-start gap-3">
+          <span class="w-7 h-7 rounded-lg bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-bold text-sm flex items-center justify-center flex-shrink-0">
+            {step}
+          </span>
+          <div>
+            <h3 class="font-display text-sm font-bold text-neutral-900 dark:text-white">{title}</h3>
+            <p class="text-xs text-neutral-600 dark:text-neutral-400 mt-0.5 leading-relaxed">{description}</p>
           </div>
-        ))}
-      </div>
-    </div>
-
-    <!-- Privacy Pillars Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-      {privacyPillars.map(({ icon, title, description }) => (
-        <div class="p-6 rounded-2xl bg-neutral-800/40 border border-neutral-800 hover:border-neutral-700 hover:bg-neutral-800/60 transition-all duration-200">
-          <div class="text-3xl mb-3.5" aria-hidden="true">{icon}</div>
-          <h3 class="font-display text-base font-bold text-white mb-2">{title}</h3>
-          <p class="text-xs sm:text-sm text-neutral-400 leading-relaxed">{description}</p>
         </div>
       ))}
     </div>
 
-    <!-- Technical Verifiability Banner -->
-    <div class="mt-12 p-5 sm:p-6 rounded-2xl bg-emerald-950/40 border border-emerald-800/50 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-start gap-3.5">
-        <div class="text-2xl mt-0.5">🔬</div>
-        <div>
-          <h4 class="font-display text-sm font-bold text-emerald-200">Verify in your browser network tab</h4>
-          <p class="text-xs text-emerald-300/80 mt-0.5">
-            Press <kbd class="px-1.5 py-0.5 rounded bg-emerald-900 text-emerald-100 font-mono text-[11px]">F12</kbd> &rarr; <span class="font-semibold">Network</span> tab to confirm: 0 bytes of your file are ever uploaded.
-          </p>
+    <!-- Simple Benefits Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+      {simpleBenefits.map(({ icon, title, description }) => (
+        <div class="p-4 rounded-xl bg-white dark:bg-neutral-900/80 border border-neutral-200/80 dark:border-neutral-800/80 hover:border-emerald-300 dark:hover:border-emerald-700 shadow-2xs transition-all duration-150">
+          <div class="text-2xl mb-2" aria-hidden="true">{icon}</div>
+          <h3 class="font-display text-sm font-bold text-neutral-900 dark:text-white mb-1">{title}</h3>
+          <p class="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">{description}</p>
         </div>
-      </div>
-      <a
-        href="https://github.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="flex-shrink-0 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-neutral-950 font-bold text-xs shadow-md transition-colors"
-      >
-        Inspect Source Code &rarr;
-      </a>
+      ))}
     </div>
   </div>
 </section>

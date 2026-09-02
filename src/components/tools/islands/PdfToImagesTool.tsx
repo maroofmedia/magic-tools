@@ -9,9 +9,9 @@ import type { ToolConfig } from '@/types/index';
 interface Props { tool: ToolConfig }
 
 const DPI_PRESETS = [
-  { label: '72 DPI (Web)', val: 72 },
-  { label: '150 DPI (Standard)', val: 150 },
-  { label: '300 DPI (High Print)', val: 300 },
+  { label: '72 DPI (Standard)', val: 72 },
+  { label: '150 DPI (High Quality)', val: 150 },
+  { label: '300 DPI (Ultra Sharp)', val: 300 },
 ];
 
 export default function PdfToImagesTool({ tool }: Props) {
@@ -20,10 +20,10 @@ export default function PdfToImagesTool({ tool }: Props) {
       tool={tool}
       defaultOptions={{ format: 'image/jpeg', dpi: 150 }}
       optionsRenderer={(_files, options, setOptions) => (
-        <div class="space-y-5">
+        <div class="space-y-4">
           {/* Output Format */}
           <div>
-            <p class="text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-2">
+            <p class="text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200 mb-1.5">
               Image Format
             </p>
             <div class="flex gap-2">
@@ -32,9 +32,9 @@ export default function PdfToImagesTool({ tool }: Props) {
                   key={fmt}
                   type="button"
                   onClick={() => setOptions({ ...options, format: fmt })}
-                  class={`px-4 py-2 rounded-xl text-xs font-semibold border transition-all ${options.format === fmt ? 'border-brand-500 bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 shadow-xs' : 'border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:border-neutral-300'}`}
+                  class={`px-3.5 py-1.5 rounded-lg text-xs font-semibold border transition-all ${options.format === fmt ? 'border-brand-500 bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 shadow-xs' : 'border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:border-neutral-300'}`}
                 >
-                  {fmt === 'image/jpeg' ? 'JPEG' : 'PNG (Lossless)'}
+                  {fmt === 'image/jpeg' ? 'JPEG' : 'PNG'}
                 </button>
               ))}
             </div>
@@ -42,14 +42,14 @@ export default function PdfToImagesTool({ tool }: Props) {
 
           {/* Resolution DPI */}
           <div>
-            <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center justify-between mb-1.5">
               <label for="pdf-dpi" class="text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200">
-                Render Resolution: <span class="text-brand-600 dark:text-brand-400 font-mono font-bold">{options.dpi as number} DPI</span>
+                Image Clarity: <span class="text-brand-600 dark:text-brand-400 font-mono font-bold">{options.dpi as number} DPI</span>
               </label>
             </div>
 
             {/* DPI Presets */}
-            <div class="flex flex-wrap gap-1.5 mb-3">
+            <div class="flex flex-wrap gap-1.5 mb-2.5">
               {DPI_PRESETS.map((dp) => (
                 <button
                   key={dp.val}

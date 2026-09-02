@@ -32,12 +32,14 @@ export default function ToolProcessor({ tool, processFiles, optionsRenderer, def
   const [results, setResults] = useState<ProcessedFile[]>([]);
   const [successMessage, setSuccessMessage] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [customNames, setCustomNames] = useState<Record<number, string>>({});
 
   const onFilesSelected = useCallback((selected: File[]) => {
     setFiles((prev) => (tool.multiFile ? [...prev, ...selected] : selected));
     setResults([]);
     setStatus('idle');
     setErrorMessage('');
+    setCustomNames({});
   }, [tool.multiFile]);
 
   function removeFile(index: number) {
@@ -85,13 +87,22 @@ export default function ToolProcessor({ tool, processFiles, optionsRenderer, def
     setErrorMessage('');
     setSuccessMessage('');
     setOptions(defaultOptions);
+    setCustomNames({});
+  }
+
+  function getFinalFileName(originalName: string, index: number): string {
+    const custom = customNames[index]?.trim();
+    if (!custom) return originalName;
+    const ext = originalName.split('.').pop();
+    if (!ext) return custom;
+    return custom.toLowerCase().endsWith(`.${ext.toLowerCase()}`) ? custom : `${custom}.${ext}`;
   }
 
   const isProcessing = status === 'processing';
   const isDone = status === 'done';
 
   return (
-    <div class="space-y-6 max-w-4xl mx-auto">
+    <div class="space-y-4 max-w-3xl mx-auto">
       {/* Drop Zone */}
       {!isDone && (
         <DropZone
@@ -107,9 +118,9 @@ export default function ToolProcessor({ tool, processFiles, optionsRenderer, def
 
       {/* Selected File Queue */}
       {files.length > 0 && !isDone && (
-        <div class="p-5 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-xs space-y-3">
+        <div class="p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-2xs space-y-2.5">
           <div class="flex items-center justify-between">
-            <span class="font-display font-bold text-sm text-neutral-900 dark:text-white">
+            <span class="font-display font-bold text-xs sm:text-sm text-neutral-900 dark:text-white">
               Selected {files.length === 1 ? 'File' : `Files (${files.length})`}
             </span>
             <button
@@ -122,23 +133,23 @@ export default function ToolProcessor({ tool, processFiles, optionsRenderer, def
             </button>
           </div>
 
-          <div class="space-y-2 max-h-60 overflow-y-auto pr-1">
+          <div class="space-y-1.5 max-h-52 overflow-y-auto pr-1">
             {files.map((file, i) => (
-              <div key={i} class="flex items-center justify-between gap-3 p-3 rounded-xl bg-neutral-50 dark:bg-neutral-800/80 border border-neutral-200/60 dark:border-neutral-700/60 text-xs sm:text-sm">
-                <div class="flex items-center gap-2.5 min-w-0 flex-1">
-                  <span class="w-8 h-8 rounded-lg bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center text-neutral-600 dark:text-neutral-300 font-mono text-[11px] uppercase flex-shrink-0 font-bold">
+              <div key={i} class="flex items-center justify-between gap-2.5 p-2.5 rounded-lg bg-neutral-50 dark:bg-neutral-800/80 border border-neutral-200/60 dark:border-neutral-700/60 text-xs">
+                <div class="flex items-center gap-2 min-w-0 flex-1">
+                  <span class="w-7 h-7 rounded-md bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center text-neutral-600 dark:text-neutral-300 font-mono text-[10px] uppercase flex-shrink-0 font-bold">
                     {file.name.split('.').pop() || 'file'}
                   </span>
                   <span class="truncate font-medium text-neutral-800 dark:text-neutral-200">{file.name}</span>
                 </div>
-                <div class="flex items-center gap-3 flex-shrink-0">
+                <div class="flex items-center gap-2.5 flex-shrink-0">
                   <span class="font-mono text-xs text-neutral-500 dark:text-neutral-400">{formatBytes(file.size)}</span>
                   {!isProcessing && (
                     <button
                       type="button"
                       onClick={() => removeFile(i)}
                       aria-label={`Remove ${file.name}`}
-                      class="w-6 h-6 rounded-lg text-neutral-400 hover:text-red-500 hover:bg-neutral-200 dark:hover:bg-neutral-700 flex items-center justify-center transition-colors"
+                      class="w-5 h-5 rounded text-neutral-400 hover:text-red-500 hover:bg-neutral-200 dark:hover:bg-neutral-700 flex items-center justify-center transition-colors"
                     >
                       ✕
                     </button>
@@ -152,12 +163,12 @@ export default function ToolProcessor({ tool, processFiles, optionsRenderer, def
 
       {/* Tool-Specific Options Panel */}
       {files.length > 0 && !isDone && optionsRenderer && (
-        <div class="p-6 rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-xs space-y-4">
-          <div class="flex items-center gap-2 pb-2 border-b border-neutral-100 dark:border-neutral-800">
+        <div class="p-4 sm:p-5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-2xs space-y-3">
+          <div class="flex items-center gap-1.5 pb-2 border-b border-neutral-100 dark:border-neutral-800">
             <svg class="w-4 h-4 text-brand-600 dark:text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
             </svg>
-            <h3 class="font-display font-bold text-sm text-neutral-900 dark:text-white">Configuration Options</h3>
+            <h3 class="font-display font-bold text-xs sm:text-sm text-neutral-900 dark:text-white">Options</h3>
           </div>
           {optionsRenderer(files, options, setOptions)}
         </div>
@@ -165,44 +176,44 @@ export default function ToolProcessor({ tool, processFiles, optionsRenderer, def
 
       {/* Processing Progress Bar */}
       {isProcessing && (
-        <ProgressBar value={progress} label="Executing client-side processing…" />
+        <ProgressBar value={progress} label="Processing files…" />
       )}
 
       {/* Error Banner */}
       {status === 'error' && errorMessage && (
-        <div role="alert" class="flex items-start gap-3 p-4 rounded-2xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800/60 animate-fade-in">
-          <svg class="w-5 h-5 flex-shrink-0 text-red-500 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div role="alert" class="flex items-start gap-2.5 p-3.5 rounded-xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-800/60 animate-fade-in">
+          <svg class="w-4.5 h-4.5 flex-shrink-0 text-red-500 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
           <div>
-            <p class="text-sm font-semibold text-red-800 dark:text-red-300">Processing Failed</p>
-            <p class="text-xs sm:text-sm text-red-700 dark:text-red-400 mt-0.5 leading-relaxed">{errorMessage}</p>
+            <p class="text-xs sm:text-sm font-semibold text-red-800 dark:text-red-300">Processing Failed</p>
+            <p class="text-xs text-red-700 dark:text-red-400 mt-0.5 leading-relaxed">{errorMessage}</p>
           </div>
         </div>
       )}
 
       {/* Process Action Button */}
       {files.length > 0 && !isDone && (
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2.5">
           <button
             type="button"
             onClick={handleProcess}
             disabled={isProcessing}
             id={`process-${tool.slug}`}
-            class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 disabled:bg-neutral-300 dark:disabled:bg-neutral-800 text-white font-semibold text-sm sm:text-base shadow-lg shadow-brand-500/25 hover:shadow-brand-500/35 disabled:shadow-none transition-all duration-200 disabled:cursor-not-allowed hover:-translate-y-0.5 active:translate-y-0"
+            class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 disabled:bg-neutral-300 dark:disabled:bg-neutral-800 text-white font-semibold text-sm shadow-md shadow-brand-500/20 hover:shadow-brand-500/30 disabled:shadow-none transition-all duration-150 disabled:cursor-not-allowed hover:-translate-y-0.5 active:translate-y-0"
           >
             {isProcessing ? (
               <>
-                <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
                   <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
                 </svg>
-                <span>Processing Files…</span>
+                <span>Processing…</span>
               </>
             ) : (
               <>
                 <span>{tool.icon}</span>
-                <span>Process with {tool.name}</span>
+                <span>{tool.name}</span>
               </>
             )}
           </button>
@@ -211,17 +222,17 @@ export default function ToolProcessor({ tool, processFiles, optionsRenderer, def
 
       {/* Results Showcase */}
       {isDone && results.length > 0 && (
-        <div class="space-y-6 animate-fade-in">
+        <div class="space-y-4 animate-fade-in">
           {/* Success Banner */}
-          <div class="flex items-center gap-3.5 p-4 sm:p-5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/90 dark:border-emerald-800/60 shadow-2xs">
-            <div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 font-bold text-sm">
+          <div class="flex items-center gap-3 p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/90 dark:border-emerald-800/60 shadow-2xs">
+            <div class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 font-bold text-xs">
               ✓
             </div>
             <div class="min-w-0 flex-1">
-              <p class="font-display font-bold text-sm sm:text-base text-emerald-950 dark:text-emerald-100">
-                Processing Completed Successfully!
+              <p class="font-display font-bold text-xs sm:text-sm text-emerald-950 dark:text-emerald-100">
+                Ready to download
               </p>
-              <p class="text-xs sm:text-sm text-emerald-800 dark:text-emerald-300 mt-0.5 truncate">
+              <p class="text-xs text-emerald-800 dark:text-emerald-300 mt-0.5 truncate">
                 {successMessage}
               </p>
             </div>
@@ -258,10 +269,30 @@ export default function ToolProcessor({ tool, processFiles, optionsRenderer, def
                   </div>
                 </div>
 
+                {/* Optional Rename */}
+                <div class="space-y-1">
+                  <label for={`rename-${i}`} class="block text-[11px] font-semibold text-neutral-600 dark:text-neutral-400">
+                    Rename file <span class="font-normal text-neutral-400">(optional)</span>
+                  </label>
+                  <div class="flex items-center gap-1.5">
+                    <input
+                      id={`rename-${i}`}
+                      type="text"
+                      placeholder={result.name.replace(/\.[^.]+$/, '')}
+                      value={customNames[i] ?? ''}
+                      onInput={(e) => setCustomNames({ ...customNames, [i]: (e.target as HTMLInputElement).value })}
+                      class="w-full px-2.5 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-xs text-neutral-900 dark:text-white placeholder-neutral-400 focus:border-brand-500 focus:outline-none"
+                    />
+                    <span class="text-[11px] font-mono text-neutral-400 flex-shrink-0">
+                      .{result.name.split('.').pop()}
+                    </span>
+                  </div>
+                </div>
+
                 {/* Download Button */}
                 <button
                   type="button"
-                  onClick={() => downloadBlob(result.blob, result.name)}
+                  onClick={() => downloadBlob(result.blob, getFinalFileName(result.name, i))}
                   class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs sm:text-sm font-semibold shadow-md shadow-brand-500/20 transition-all duration-150 hover:-translate-y-0.5"
                 >
                   <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -281,7 +312,7 @@ export default function ToolProcessor({ tool, processFiles, optionsRenderer, def
                 onClick={async () => {
                   try {
                     const { createZip } = await import('@/utils/helpers');
-                    const zipItems = results.map(r => ({ name: r.name, blob: r.blob }));
+                    const zipItems = results.map((r, idx) => ({ name: getFinalFileName(r.name, idx), blob: r.blob }));
                     const zip = await createZip(zipItems);
                     downloadBlob(zip, `${tool.slug}-results.zip`);
                   } catch (e) {

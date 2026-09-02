@@ -117,9 +117,9 @@ export default function DropZone({
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         class={[
-          'group relative flex flex-col items-center justify-center gap-4 p-8 sm:p-14',
-          'rounded-3xl border-2 border-dashed transition-all duration-200 cursor-pointer text-center',
-          'bg-white/80 dark:bg-neutral-900/80 shadow-xs',
+          'group relative flex flex-col items-center justify-center gap-3 p-6 sm:p-9',
+          'rounded-2xl border-2 border-dashed transition-all duration-150 cursor-pointer text-center',
+          'bg-white/80 dark:bg-neutral-900/80 shadow-2xs',
           isDragging
             ? 'dropzone-active scale-[1.01] border-brand-500'
             : 'border-neutral-300 dark:border-neutral-700/80 hover:border-brand-500 dark:hover:border-brand-400 hover:bg-brand-50/20 dark:hover:bg-brand-950/20',
@@ -127,37 +127,37 @@ export default function DropZone({
         ].filter(Boolean).join(' ')}
       >
         {/* Icon Badge */}
-        <div class={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-300 ${isDragging ? 'bg-brand-600 text-white scale-110 shadow-lg shadow-brand-500/30' : 'bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 group-hover:scale-105'}`}>
-          <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        <div class={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 ${isDragging ? 'bg-brand-600 text-white scale-105 shadow-md shadow-brand-500/30' : 'bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 group-hover:scale-105'}`}>
+          <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75"
               d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
           </svg>
         </div>
 
         {/* Typography & Instructions */}
-        <div class="space-y-1.5 max-w-sm">
-          <p class="font-display font-bold text-lg sm:text-xl text-neutral-900 dark:text-neutral-100">
-            {isDragging ? 'Drop files to upload' : `Choose ${multiFile ? 'files' : 'a file'} or drag & drop`}
+        <div class="space-y-1 max-w-sm">
+          <p class="font-display font-semibold text-base sm:text-lg text-neutral-900 dark:text-neutral-100">
+            {isDragging ? 'Drop your file here' : `Choose ${multiFile ? 'files' : 'a file'} or drag here`}
           </p>
-          <p class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed">
-            Drag files directly here, or click to browse from your device
+          <p class="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
+            Drag files directly here, or click to browse
           </p>
         </div>
 
-        {/* Action Button (Mobile & Desktop Friendly) */}
+        {/* Action Button */}
         <button
           type="button"
           tabIndex={-1}
-          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-600 group-hover:bg-brand-700 text-white text-xs sm:text-sm font-semibold shadow-md shadow-brand-500/20 transition-all pointer-events-none"
+          class="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-brand-600 group-hover:bg-brand-700 text-white text-xs sm:text-sm font-semibold shadow-xs transition-all pointer-events-none"
         >
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
           <span>Select {multiFile ? 'Files' : 'File'}</span>
         </button>
 
         {/* Format Badges & Paste hint */}
-        <div class="pt-2 flex flex-wrap items-center justify-center gap-2 text-[11px] text-neutral-400 dark:text-neutral-500 font-mono">
+        <div class="pt-1 flex flex-wrap items-center justify-center gap-2 text-[11px] text-neutral-400 dark:text-neutral-500 font-mono">
           <span>{acceptedExtensions.join(' · ')}</span>
           <span>•</span>
           <span>Max {maxSizeMB} MB</span>

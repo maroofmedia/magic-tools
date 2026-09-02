@@ -38,7 +38,7 @@ export default function ConvertFormatTool({ tool }: Props) {
         <div class="space-y-3">
           <div class="flex items-center justify-between mb-2">
             <label for="convert-quality" class="text-xs sm:text-sm font-semibold text-neutral-800 dark:text-neutral-200">
-              Output Compression Quality: <span class="text-brand-600 dark:text-brand-400 font-mono font-bold">{Math.round((options.quality as number) * 100)}%</span>
+              Quality: <span class="text-brand-600 dark:text-brand-400 font-mono font-bold">{Math.round((options.quality as number) * 100)}%</span>
             </label>
           </div>
 
@@ -67,8 +67,8 @@ export default function ConvertFormatTool({ tool }: Props) {
             class="w-full accent-brand-600 cursor-pointer"
           />
           <div class="flex justify-between text-[11px] font-mono text-neutral-400 dark:text-neutral-500 mt-1">
-            <span>50% (Smaller file size)</span>
-            <span>100% (Maximum visual fidelity)</span>
+            <span>50% (Smaller file)</span>
+            <span>100% (Best quality)</span>
           </div>
         </div>
       ) : undefined}

@@ -2,6 +2,7 @@
  * PDF split using pdf-lib (lazy-loaded)
  */
 import { formatBytes, fileToArrayBuffer } from '@/utils/helpers';
+import { PDFDocument } from 'pdf-lib';
 import type { ToolProcessResult, ProcessedFile } from '@/types/index';
 
 export interface SplitRange {
@@ -18,10 +19,7 @@ export async function splitPdf(
   ranges: SplitRange[],
   onProgress: (pct: number) => void,
 ): Promise<ToolProcessResult> {
-  onProgress(5);
-
-  const { PDFDocument } = await import('pdf-lib');
-  onProgress(15);
+  onProgress(10);
 
   const arrayBuffer = await fileToArrayBuffer(file);
   const sourcePdf = await PDFDocument.load(arrayBuffer);

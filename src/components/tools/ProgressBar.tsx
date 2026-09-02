@@ -11,7 +11,7 @@ export default function ProgressBar({ value, label = 'Processing…' }: Props) {
   const clamped = Math.min(100, Math.max(0, Math.round(value)));
 
   return (
-    <div class="space-y-2 p-5 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-sm animate-fade-in" role="status" aria-label={label}>
+    <div class="space-y-2 p-3.5 sm:p-4 rounded-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-2xs animate-fade-in" role="status" aria-label={label}>
       <div class="flex items-center justify-between text-xs font-semibold">
         <span class="text-neutral-700 dark:text-neutral-300 flex items-center gap-2">
           <svg class="w-3.5 h-3.5 animate-spin text-brand-600 dark:text-brand-400" fill="none" viewBox="0 0 24 24">

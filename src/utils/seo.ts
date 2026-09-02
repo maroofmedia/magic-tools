@@ -5,12 +5,12 @@
 export const SITE_NAME = 'Magic Tools';
 export const SITE_URL = 'https://magictools.app';
 export const SITE_DESCRIPTION =
-  'Free online file utilities that work entirely in your browser. Compress images, convert PDFs, crop photos, and more — no upload, no cloud, 100% private.';
+  'Free and easy online tools to compress, convert, and edit images and PDF documents directly in your browser.';
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/og/default.png`;
 
 /** Build a full page title */
 export function buildTitle(pageTitle?: string): string {
-  if (!pageTitle) return `${SITE_NAME} — Free Browser-Based File Tools`;
+  if (!pageTitle) return `${SITE_NAME} — Free Online File Tools`;
   return `${pageTitle} — ${SITE_NAME}`;
 }
 

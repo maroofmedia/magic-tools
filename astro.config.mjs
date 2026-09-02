@@ -15,6 +15,7 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
     optimizeDeps: {
+      include: ['pdf-lib', 'browser-image-compression', 'jszip'],
       exclude: ['pdfjs-dist'],
     },
     build: {
@@ -24,7 +25,6 @@ export default defineConfig({
             if (id.includes('pdfjs-dist')) return 'pdfjs';
             if (id.includes('pdf-lib')) return 'pdflib';
             if (id.includes('browser-image-compression')) return 'imgcompression';
-            if (id.includes('cropperjs')) return 'cropperjs';
           },
         },
       },
