@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d16" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5" />
+      <stop offset="50%" stop-color="#7c3aed" />
+      <stop offset="100%" stop-color="#ec4899" />
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#090d16" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <rect width="1200" height="630" fill="url(#glow)" />
+
+  <!-- Outer Card Frame -->
+  <rect x="40" y="40" width="1120" height="550" rx="24" fill="#ffffff" fill-opacity="0.03" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1.5" />
+
+  <!-- Logo Mark -->
+  <g transform="translate(100, 110)">
+    <rect width="72" height="72" rx="18" fill="url(#accent)" />
+    <path d="M26 18H16a4 4 0 00-4 4v8m14-12h20a4 4 0 014 4v8M26 18v36m0 0h20a4 4 0 004-4V26M26 54H16a4 4 0 01-4-4V26m0 0h36" fill="none" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Brand Name -->
+  <text x="190" y="160" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="44" font-weight="800" fill="#ffffff" letter-spacing="-1">
+    Magic<tspan fill="#818cf8">Tools</tspan>
+  </text>
+
+  <!-- Main Headline -->
+  <text x="100" y="270" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="52" font-weight="800" fill="#ffffff" letter-spacing="-1">
+    Free, Fast &amp; Simple File Tools
+  </text>
+  
+  <text x="100" y="335" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="400" fill="#94a3b8">
+    Compress, convert, and edit images and PDF documents directly in your browser.
+  </text>
+
+  <!-- Feature Pills -->
+  <g transform="translate(100, 410)">
+    <!-- Pill 1: Compress Image -->
+    <g transform="translate(0, 0)">
+      <rect width="260" height="60" rx="14" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1" />
+      <text x="25" y="38" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="600" fill="#ffffff">🗜️  Compress Image</text>
+    </g>
+
+    <!-- Pill 2: Compress PDF -->
+    <g transform="translate(280, 0)">
+      <rect width="240" height="60" rx="14" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1" />
+      <text x="25" y="38" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="600" fill="#ffffff">📄  Compress PDF</text>
+    </g>
+
+    <!-- Pill 3: Image to PDF -->
+    <g transform="translate(540, 0)">
+      <rect width="240" height="60" rx="14" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1" />
+      <text x="25" y="38" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="600" fill="#ffffff">⚡  Image to PDF</text>
+    </g>
+
+    <!-- Pill 4: Convert Formats -->
+    <g transform="translate(800, 0)">
+      <rect width="200" height="60" rx="14" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.1" stroke-width="1" />
+      <text x="25" y="38" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="600" fill="#ffffff">🔄  All Formats</text>
+    </g>
+  </g>
+
+  <!-- Bottom Badges -->
+  <text x="100" y="530" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="600" fill="#10b981">
+    ✓ 100% Free  •  ✓ No Account Needed  •  ✓ Private &amp; Secure  •  ✓ Works on Any Device
+  </text>
+</svg>

@@ -6,7 +6,6 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://magictools.app',
   output: 'static',
   integrations: [
     preact({ compat: true }),

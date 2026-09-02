@@ -6,7 +6,7 @@ import BaseLayout from './BaseLayout.astro';
 import Header from '@/components/layout/Header.astro';
 import Footer from '@/components/layout/Footer.astro';
 import Breadcrumb from '@/components/common/Breadcrumb.astro';
-import { buildToolSchema, SITE_URL } from '@/utils/seo';
+import { buildToolSchema } from '@/utils/seo';
 import type { ToolConfig } from '@/types/index';
 
 interface Props {
@@ -18,11 +18,11 @@ const { tool } = Astro.props;
 const schema = buildToolSchema({
   name: tool.name,
   description: tool.longDescription,
-  url: `${SITE_URL}/tools/${tool.slug}`,
+  url: `/tools/${tool.slug}`,
   breadcrumbs: [
-    { name: 'Home', url: SITE_URL },
-    { name: 'Tools', url: `${SITE_URL}/#tools` },
-    { name: tool.name, url: `${SITE_URL}/tools/${tool.slug}` },
+    { name: 'Home', url: '/' },
+    { name: 'Tools', url: '/#tools' },
+    { name: tool.name, url: `/tools/${tool.slug}` },
   ],
 });
 
@@ -32,7 +32,9 @@ const categoryLabel = tool.category === 'image' ? 'Image Tools' : 'PDF Tools';
 <BaseLayout
   title={tool.name}
   description={tool.metaDescription}
-  canonical={`${SITE_URL}/tools/${tool.slug}`}
+  canonical={`/tools/${tool.slug}`}
+  keywords={`${tool.name.toLowerCase()}, ${tool.slug.replace(/-/g, ' ')}, ${tool.acceptedExtensions.join(', ')}, free online tool`}
+  ogImageAlt={`${tool.name} — Free Online Tool`}
   schema={schema}
 >
   <Header />

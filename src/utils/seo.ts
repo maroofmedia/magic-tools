@@ -3,10 +3,12 @@
 // ─────────────────────────────────────────────
 
 export const SITE_NAME = 'Magic Tools';
-export const SITE_URL = 'https://magictools.app';
 export const SITE_DESCRIPTION =
   'Free and easy online tools to compress, convert, and edit images and PDF documents directly in your browser.';
-export const DEFAULT_OG_IMAGE = `${SITE_URL}/og/default.png`;
+export const DEFAULT_OG_IMAGE = '/og-image.svg';
+export const DEFAULT_OG_IMAGE_ALT = 'Magic Tools — Free Online Image & PDF Tools';
+export const DEFAULT_KEYWORDS =
+  'compress image, image compressor, compress pdf, image to pdf, pdf to images, merge pdf, split pdf, jpg to png, png to jpg, convert webp, convert avif, free online file tools';
 
 /** Build a full page title */
 export function buildTitle(pageTitle?: string): string {
@@ -16,15 +18,15 @@ export function buildTitle(pageTitle?: string): string {
 
 /** Build a canonical URL */
 export function buildCanonical(path: string): string {
-  return `${SITE_URL}${path}`;
+  return path;
 }
 
 /** Build JSON-LD for a tool page */
 export function buildToolSchema(opts: {
   name: string;
   description: string;
-  url: string;
-  breadcrumbs: { name: string; url: string }[];
+  url?: string;
+  breadcrumbs: { name: string; url?: string }[];
 }): string {
   const schema = {
     '@context': 'https://schema.org',
@@ -33,7 +35,7 @@ export function buildToolSchema(opts: {
         '@type': 'WebApplication',
         name: opts.name,
         description: opts.description,
-        url: opts.url,
+        ...(opts.url ? { url: opts.url } : {}),
         applicationCategory: 'UtilitiesApplication',
         operatingSystem: 'All',
         offers: {
@@ -44,7 +46,6 @@ export function buildToolSchema(opts: {
         creator: {
           '@type': 'Organization',
           name: SITE_NAME,
-          url: SITE_URL,
         },
       },
       {
@@ -53,7 +54,7 @@ export function buildToolSchema(opts: {
           '@type': 'ListItem',
           position: idx + 1,
           name: crumb.name,
-          item: crumb.url,
+          ...(crumb.url ? { item: crumb.url } : {}),
         })),
       },
     ],
@@ -67,13 +68,7 @@ export function buildHomepageSchema(): string {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: SITE_NAME,
-    url: SITE_URL,
     description: SITE_DESCRIPTION,
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: `${SITE_URL}/?search={search_term_string}`,
-      'query-input': 'required name=search_term_string',
-    },
   };
   return JSON.stringify(schema);
 }
