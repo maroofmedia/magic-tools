@@ -1,10 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <rect width="32" height="32" rx="8" fill="url(#grad)"/>
-  <path d="M9 7H6a2 2 0 00-2 2v4m5-6h14a2 2 0 012 2v4M9 7v18m0 0h14a2 2 0 002-2V11M9 25H6a2 2 0 01-2-2V11m0 0h22" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
   <defs>
-    <linearGradient id="grad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#6366f1"/>
+    <linearGradient id="brand-grad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#4f46e5"/>
+      <stop offset="50%" stop-color="#6366f1"/>
       <stop offset="100%" stop-color="#a855f7"/>
     </linearGradient>
   </defs>
+  <rect width="32" height="32" rx="8" fill="url(#brand-grad)"/>
+  <g transform="translate(4, 4)">
+    <path stroke="white" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"
+      d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/>
+  </g>
 </svg>
