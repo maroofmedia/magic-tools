@@ -117,7 +117,7 @@ export default function DropZone({
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         class={[
-          'group relative flex flex-col items-center justify-center gap-3 p-8 sm:p-14',
+          'group relative flex flex-col items-center justify-center gap-3 p-6 sm:p-10',
           'rounded-3xl border-2 border-dashed transition-all duration-200 cursor-pointer text-center',
           'bg-white/90 dark:bg-neutral-900/90 shadow-sm',
           isDragging

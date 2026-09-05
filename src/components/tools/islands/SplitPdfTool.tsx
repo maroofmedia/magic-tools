@@ -5,6 +5,7 @@
 import { useState } from 'preact/hooks';
 import DropZone from '@/components/tools/DropZone';
 import ProgressBar from '@/components/tools/ProgressBar';
+import FileThumbnailStrip from '@/components/tools/FileThumbnailStrip';
 import { splitPdf, parsePageRanges } from '@/lib/pdf/split';
 import { downloadBlob } from '@/utils/helpers';
 import { PDFDocument } from 'pdf-lib';
@@ -92,20 +93,15 @@ export default function SplitPdfTool({ tool }: Props) {
 
       {file && status !== 'done' && (
         <div class="space-y-4">
-          {/* File info banner */}
-          <div class="flex items-center justify-between p-3 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-xs sm:text-sm">
-            <div class="flex items-center gap-2.5 min-w-0">
-              <span class="w-7 h-7 rounded-md bg-red-100 dark:bg-red-950/60 text-red-600 dark:text-red-400 flex items-center justify-center font-bold text-xs">
-                PDF
-              </span>
-              <span class="font-semibold text-neutral-900 dark:text-white truncate">{file.name}</span>
-            </div>
-            {totalPages && (
-              <span class="font-mono font-bold text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-950/60 px-2 py-0.5 rounded-md border border-brand-200/60 dark:border-brand-800/60 flex-shrink-0 text-xs">
-                {totalPages} {totalPages === 1 ? 'page' : 'pages'}
-              </span>
-            )}
-          </div>
+          {/* File Thumbnail & Info */}
+          <FileThumbnailStrip
+            files={[file]}
+            onRemoveFile={reset}
+            onClearAll={reset}
+            disabled={status === 'processing'}
+            allowReorder={false}
+            title={totalPages ? `Selected PDF (${totalPages} ${totalPages === 1 ? 'page' : 'pages'})` : 'Selected PDF'}
+          />
 
           {/* Page Range Options */}
           <div class="p-4 sm:p-5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-2xs space-y-3">

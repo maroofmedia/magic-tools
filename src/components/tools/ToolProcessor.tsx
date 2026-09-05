@@ -2,10 +2,11 @@
 /**
  * ToolProcessor.tsx — Generic tool lifecycle controller with queue management & results
  */
-import { useState, useCallback } from 'preact/hooks';
+import { useState, useCallback, useRef } from 'preact/hooks';
 import type { ComponentChildren } from 'preact';
 import DropZone from './DropZone';
 import ProgressBar from './ProgressBar';
+import FileThumbnailStrip from './FileThumbnailStrip';
 import { downloadBlob, formatBytes, formatReduction } from '@/utils/helpers';
 import type { ProcessedFile, ToolConfig, ToolProcessResult } from '@/types/index';
 
@@ -33,6 +34,7 @@ export default function ToolProcessor({ tool, processFiles, optionsRenderer, def
   const [successMessage, setSuccessMessage] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [customNames, setCustomNames] = useState<Record<number, string>>({});
+  const addInputRef = useRef<HTMLInputElement>(null);
 
   const onFilesSelected = useCallback((selected: File[]) => {
     setFiles((prev) => (tool.multiFile ? [...prev, ...selected] : selected));
@@ -103,8 +105,8 @@ export default function ToolProcessor({ tool, processFiles, optionsRenderer, def
 
   return (
     <div class="space-y-4 max-w-3xl mx-auto">
-      {/* Drop Zone */}
-      {!isDone && (
+      {/* Drop Zone when no files selected */}
+      {files.length === 0 && !isDone && (
         <DropZone
           acceptedTypes={tool.acceptedTypes}
           acceptedExtensions={tool.acceptedExtensions}
@@ -116,48 +118,47 @@ export default function ToolProcessor({ tool, processFiles, optionsRenderer, def
         />
       )}
 
-      {/* Selected File Queue */}
+      {/* Selected File Queue with Horizontal Line Thumbnails */}
       {files.length > 0 && !isDone && (
-        <div class="p-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-2xs space-y-2.5">
-          <div class="flex items-center justify-between">
-            <span class="font-display font-bold text-xs sm:text-sm text-neutral-900 dark:text-white">
-              Selected {files.length === 1 ? 'File' : `Files (${files.length})`}
-            </span>
-            <button
-              type="button"
-              onClick={reset}
-              disabled={isProcessing}
-              class="text-xs text-red-600 dark:text-red-400 hover:underline disabled:opacity-50"
-            >
-              Clear all
-            </button>
-          </div>
+        <div class="space-y-2.5">
+          <FileThumbnailStrip
+            files={files}
+            onRemoveFile={removeFile}
+            onClearAll={reset}
+            disabled={isProcessing}
+            allowReorder={false}
+          />
 
-          <div class="space-y-1.5 max-h-52 overflow-y-auto pr-1">
-            {files.map((file, i) => (
-              <div key={i} class="flex items-center justify-between gap-2.5 p-2.5 rounded-lg bg-neutral-50 dark:bg-neutral-800/80 border border-neutral-200/60 dark:border-neutral-700/60 text-xs">
-                <div class="flex items-center gap-2 min-w-0 flex-1">
-                  <span class="w-7 h-7 rounded-md bg-neutral-200 dark:bg-neutral-700 flex items-center justify-center text-neutral-600 dark:text-neutral-300 font-mono text-[10px] uppercase flex-shrink-0 font-bold">
-                    {file.name.split('.').pop() || 'file'}
-                  </span>
-                  <span class="truncate font-medium text-neutral-800 dark:text-neutral-200">{file.name}</span>
-                </div>
-                <div class="flex items-center gap-2.5 flex-shrink-0">
-                  <span class="font-mono text-xs text-neutral-500 dark:text-neutral-400">{formatBytes(file.size)}</span>
-                  {!isProcessing && (
-                    <button
-                      type="button"
-                      onClick={() => removeFile(i)}
-                      aria-label={`Remove ${file.name}`}
-                      class="w-5 h-5 rounded text-neutral-400 hover:text-red-500 hover:bg-neutral-200 dark:hover:bg-neutral-700 flex items-center justify-center transition-colors"
-                    >
-                      ✕
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
+          {/* Add more files button for multi-file tools */}
+          {tool.multiFile && (
+            <div class="flex items-center gap-2 pt-0.5">
+              <button
+                type="button"
+                onClick={() => addInputRef.current?.click()}
+                disabled={isProcessing}
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-xs font-semibold text-neutral-700 dark:text-neutral-300 hover:border-brand-500 hover:text-brand-600 dark:hover:text-brand-400 transition-colors shadow-2xs"
+              >
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                <span>Add more files</span>
+              </button>
+              <input
+                ref={addInputRef}
+                type="file"
+                multiple
+                accept={tool.acceptedTypes.join(',')}
+                class="sr-only"
+                onChange={(e) => {
+                  const selected = (e.target as HTMLInputElement).files;
+                  if (selected && selected.length > 0) {
+                    onFilesSelected(Array.from(selected));
+                    (e.target as HTMLInputElement).value = '';
+                  }
+                }}
+              />
+            </div>
+          )}
         </div>
       )}
 
