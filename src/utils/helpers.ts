@@ -84,13 +84,57 @@ export function validateFileSize(file: File, maxMB: number): string | null {
 }
 
 /**
- * Validate MIME type against a whitelist.
+ * Validate MIME type and/or file extension against allowed lists.
  */
-export function validateFileType(file: File, acceptedTypes: string[]): string | null {
-  if (!acceptedTypes.includes(file.type)) {
-    return `File "${file.name}" is not a supported format.`;
+export function validateFileType(
+  file: File,
+  acceptedTypes: string[],
+  acceptedExtensions?: string[],
+): string | null {
+  const fileType = (file.type || '').toLowerCase().trim();
+  const fileName = (file.name || '').toLowerCase().trim();
+  const fileExt = fileName.includes('.') ? `.${fileName.split('.').pop()}` : '';
+
+  // 1. Check direct MIME type match
+  if (fileType && acceptedTypes.some((t) => t.toLowerCase() === fileType)) {
+    return null;
   }
-  return null;
+
+  // 2. Check wildcard MIME type (e.g. "image/*")
+  if (fileType && acceptedTypes.some((t) => t.endsWith('/*') && fileType.startsWith(t.slice(0, -1)))) {
+    return null;
+  }
+
+  // 3. Check acceptedExtensions (e.g. [".jpg", ".jpeg", ".heic", ".heif", ...])
+  if (acceptedExtensions && fileExt && acceptedExtensions.some((ext) => ext.toLowerCase() === fileExt)) {
+    return null;
+  }
+
+  // 4. Common extension to MIME mapping fallback (handles empty/missing OS MIME types)
+  const EXT_TO_MIMES: Record<string, string[]> = {
+    '.heic': ['image/heic', 'image/heif'],
+    '.heif': ['image/heic', 'image/heif'],
+    '.hif': ['image/heic', 'image/heif'],
+    '.jpg': ['image/jpeg'],
+    '.jpeg': ['image/jpeg'],
+    '.png': ['image/png'],
+    '.webp': ['image/webp'],
+    '.gif': ['image/gif'],
+    '.svg': ['image/svg+xml'],
+    '.avif': ['image/avif'],
+    '.bmp': ['image/bmp'],
+    '.tiff': ['image/tiff'],
+    '.tif': ['image/tiff'],
+    '.ico': ['image/x-icon', 'image/vnd.microsoft.icon', 'image/ico'],
+    '.pdf': ['application/pdf'],
+  };
+
+  const candidateMimes = EXT_TO_MIMES[fileExt];
+  if (candidateMimes && candidateMimes.some((m) => acceptedTypes.includes(m))) {
+    return null;
+  }
+
+  return `File "${file.name}" is not a supported format.`;
 }
 
 /**

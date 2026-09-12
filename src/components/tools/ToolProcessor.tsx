@@ -147,7 +147,7 @@ export default function ToolProcessor({ tool, processFiles, optionsRenderer, def
                 ref={addInputRef}
                 type="file"
                 multiple
-                accept={tool.acceptedTypes.join(',')}
+                accept={[...tool.acceptedTypes, ...tool.acceptedExtensions].join(',')}
                 class="sr-only"
                 onChange={(e) => {
                   const selected = (e.target as HTMLInputElement).files;

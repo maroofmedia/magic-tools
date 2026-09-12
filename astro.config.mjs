@@ -13,7 +13,7 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
     optimizeDeps: {
-      include: ['pdf-lib', 'browser-image-compression', 'jszip'],
+      include: ['pdf-lib', 'browser-image-compression', 'jszip', 'heic2any'],
       exclude: ['pdfjs-dist'],
     },
     ssr: {
@@ -26,6 +26,7 @@ export default defineConfig({
             if (id.includes('pdfjs-dist')) return 'pdfjs';
             if (id.includes('pdf-lib')) return 'pdflib';
             if (id.includes('browser-image-compression')) return 'imgcompression';
+            if (id.includes('heic2any')) return 'heic2any';
           },
         },
       },

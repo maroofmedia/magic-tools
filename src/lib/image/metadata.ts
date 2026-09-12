@@ -905,9 +905,38 @@ function parseHeicMetadata(bytes: Uint8Array, out: ExtractedMetadata) {
     description: 'High Efficiency Image Container with embedded EXIF & GPS',
   });
 
-  // Search for TIFF header or Exif header within binary bytes
   const len = bytes.length;
-  for (let i = 0; i < Math.min(len - 12, 120000); i++) {
+
+  // 1. ISOBMFF Box Parser: parse 'meta' -> 'iinf' (Exif item) & 'iloc' (exact byte offset)
+  try {
+    let offset = 0;
+    while (offset + 8 <= len) {
+      let boxSize = readUint32BE(bytes, offset);
+      const boxType = decodeAscii(bytes, offset + 4, 4);
+      if (boxSize === 1 && offset + 16 <= len) {
+        boxSize = (readUint32BE(bytes, offset + 8) * 4294967296) + readUint32BE(bytes, offset + 12);
+      } else if (boxSize === 0) {
+        boxSize = len - offset;
+      }
+      if (boxSize < 8 || offset + boxSize > len) break;
+
+      if (boxType === 'meta') {
+        const metaStart = offset + 8 + 4; // FullBox has 4-byte version/flags
+        const metaEnd = offset + boxSize;
+        parseIsobmffMeta(bytes, metaStart, metaEnd, out);
+        if (out.camera?.make || out.shotDetails?.dateTime || out.gps) {
+          return;
+        }
+      }
+
+      offset += boxSize;
+    }
+  } catch (e) {
+    console.warn('ISOBMFF parse non-fatal error:', e);
+  }
+
+  // 2. Comprehensive binary scan for 'Exif\0\0' or TIFF header signatures across the entire file
+  for (let i = 0; i < len - 12; i++) {
     // Check for 'Exif\0\0'
     if (isAscii(bytes, i, 'Exif\0\0')) {
       out.detectedBlocks.push({
@@ -915,8 +944,11 @@ function parseHeicMetadata(bytes: Uint8Array, out: ExtractedMetadata) {
         description: 'Apple / Smartphone EXIF camera and GPS data',
       });
       parseTiffMetadata(bytes, i + 6, out);
-      return;
+      if (out.camera?.make || out.shotDetails?.dateTime || out.gps) {
+        return;
+      }
     }
+
     // Check for 'II*\0' (Little Endian TIFF) or 'MM\0*' (Big Endian TIFF)
     if (
       (bytes[i] === 0x49 && bytes[i + 1] === 0x49 && bytes[i + 2] === 0x2a && bytes[i + 3] === 0x00) ||
@@ -927,16 +959,139 @@ function parseHeicMetadata(bytes: Uint8Array, out: ExtractedMetadata) {
         ? (bytes[i + 4] | (bytes[i + 5] << 8) | (bytes[i + 6] << 16) | (bytes[i + 7] << 24)) >>> 0
         : ((bytes[i + 4] << 24) | (bytes[i + 5] << 16) | (bytes[i + 6] << 8) | bytes[i + 7]) >>> 0;
 
-      if (ifdOffset >= 8 && ifdOffset < 65536 && i + ifdOffset + 2 < len) {
-        out.detectedBlocks.push({
-          name: 'HEIC EXIF Stream',
-          description: 'Apple / Smartphone EXIF camera and GPS data',
-        });
-        parseTiffMetadata(bytes, i, out);
-        return;
+      if (ifdOffset >= 8 && ifdOffset < 100000 && i + ifdOffset + 2 < len) {
+        const numEntries = isLE
+          ? bytes[i + ifdOffset] | (bytes[i + ifdOffset + 1] << 8)
+          : (bytes[i + ifdOffset] << 8) | bytes[i + ifdOffset + 1];
+
+        // Valid IFD0 typically has between 1 and 200 tags
+        if (numEntries >= 1 && numEntries <= 200 && i + ifdOffset + 2 + numEntries * 12 <= len) {
+          parseTiffMetadata(bytes, i, out);
+          if (out.camera?.make || out.shotDetails?.dateTime || out.gps) {
+            return;
+          }
+        }
       }
     }
   }
+}
+
+function parseIsobmffMeta(bytes: Uint8Array, start: number, end: number, out: ExtractedMetadata) {
+  let offset = start;
+  let exifItemId: number | null = null;
+  const itemLocations: Record<number, { offset: number; length: number }> = {};
+
+  while (offset + 8 <= end) {
+    let size = readUint32BE(bytes, offset);
+    const type = decodeAscii(bytes, offset + 4, 4);
+    if (size === 1 && offset + 16 <= end) {
+      size = (readUint32BE(bytes, offset + 8) * 4294967296) + readUint32BE(bytes, offset + 12);
+    } else if (size === 0) {
+      size = end - offset;
+    }
+    if (size < 8 || offset + size > end) break;
+
+    const boxStart = offset + 8;
+    const boxEnd = offset + size;
+
+    if (type === 'iinf') {
+      // Item Info Box (FullBox: +4 bytes version/flags)
+      if (boxStart + 4 <= boxEnd) {
+        const version = bytes[boxStart];
+        let p = boxStart + 4;
+        const entryCount = version === 0 ? ((bytes[p] << 8) | bytes[p + 1]) : readUint32BE(bytes, p);
+        p += version === 0 ? 2 : 4;
+
+        while (p + 8 <= boxEnd) {
+          const infeSize = readUint32BE(bytes, p);
+          const infeType = decodeAscii(bytes, p + 4, 4);
+          if (infeSize < 8 || p + infeSize > boxEnd) break;
+
+          if (infeType === 'infe') {
+            const infeVersion = bytes[p + 8];
+            let ip = p + 8 + 4; // skip version/flags
+            const itemId = infeVersion === 2 ? ((bytes[ip] << 8) | bytes[ip + 1]) : infeVersion >= 3 ? readUint32BE(bytes, ip) : ((bytes[ip] << 8) | bytes[ip + 1]);
+            ip += infeVersion >= 3 ? 4 : 2;
+            ip += 2; // item_protection_index
+            if (infeVersion >= 2 && ip + 4 <= p + infeSize) {
+              const itemType = decodeAscii(bytes, ip, 4);
+              if (itemType === 'Exif' || itemType.toLowerCase() === 'exif') {
+                exifItemId = itemId;
+              }
+            }
+          }
+          p += infeSize;
+        }
+      }
+    } else if (type === 'iloc') {
+      // Item Location Box (FullBox: +4 bytes version/flags)
+      if (boxStart + 4 <= boxEnd) {
+        const version = bytes[boxStart];
+        const offsetSize = (bytes[boxStart + 4] >> 4) & 0x0f;
+        const lengthSize = bytes[boxStart + 4] & 0x0f;
+        const baseOffsetSize = (bytes[boxStart + 5] >> 4) & 0x0f;
+        const indexSize = version >= 1 ? (bytes[boxStart + 5] & 0x0f) : 0;
+        let p = boxStart + 8;
+
+        const itemCount = version < 2 ? ((bytes[p] << 8) | bytes[p + 1]) : readUint32BE(bytes, p);
+        p += version < 2 ? 2 : 4;
+
+        for (let i = 0; i < itemCount; i++) {
+          if (p >= boxEnd) break;
+          const itemId = version < 2 ? ((bytes[p] << 8) | bytes[p + 1]) : readUint32BE(bytes, p);
+          p += version < 2 ? 2 : 4;
+          if (version >= 1) p += 2; // construction_method
+          p += 2; // data_reference_index
+          const baseOffset = readVarUint(bytes, p, baseOffsetSize);
+          p += baseOffsetSize;
+          const extentCount = (bytes[p] << 8) | bytes[p + 1];
+          p += 2;
+
+          let itemOffset = baseOffset;
+          let itemLength = 0;
+          for (let e = 0; e < extentCount; e++) {
+            if (version >= 1 && indexSize > 0) p += indexSize;
+            const extentOffset = readVarUint(bytes, p, offsetSize);
+            p += offsetSize;
+            const extentLength = readVarUint(bytes, p, lengthSize);
+            p += lengthSize;
+            if (e === 0) itemOffset += extentOffset;
+            itemLength += extentLength;
+          }
+
+          itemLocations[itemId] = { offset: itemOffset, length: itemLength };
+        }
+      }
+    }
+
+    offset += size;
+  }
+
+  // If we found the Exif item in iloc:
+  if (exifItemId !== null && itemLocations[exifItemId]) {
+    const { offset: exifPos } = itemLocations[exifItemId];
+    if (exifPos >= 0 && exifPos + 8 < bytes.length) {
+      // In Exif item: first 4 bytes are big-endian header offset prefix
+      const headerOffset = readUint32BE(bytes, exifPos);
+      const tiffStart = exifPos + 4 + (headerOffset < 100 ? headerOffset : 0);
+      if (tiffStart < bytes.length) {
+        if (isAscii(bytes, tiffStart, 'Exif\0\0')) {
+          parseTiffMetadata(bytes, tiffStart + 6, out);
+        } else {
+          parseTiffMetadata(bytes, tiffStart, out);
+        }
+      }
+    }
+  }
+}
+
+function readVarUint(bytes: Uint8Array, offset: number, size: number): number {
+  if (size === 0) return 0;
+  if (size === 1) return bytes[offset];
+  if (size === 2) return (bytes[offset] << 8) | bytes[offset + 1];
+  if (size === 4) return readUint32BE(bytes, offset);
+  if (size === 8) return (readUint32BE(bytes, offset) * 4294967296) + readUint32BE(bytes, offset + 4);
+  return 0;
 }
 
 async function stripHeicMetadata(
@@ -946,13 +1101,15 @@ async function stripHeicMetadata(
 ): Promise<Blob> {
   onProgress?.(45);
   try {
-    const heic2any = (await import('heic2any')).default;
+    const mod = await import('heic2any');
+    const heic2any = (mod as any).default || mod;
     const converted = await heic2any({
       blob: file,
       toType: 'image/jpeg',
       quality: 1.0,
+      multiple: false,
     });
-    const blob = Array.isArray(converted) ? converted[0] : converted;
+    const blob: Blob = Array.isArray(converted) ? converted[0] : converted;
     const arrayBuf = await blob.arrayBuffer();
     const bytes = new Uint8Array(arrayBuf);
     onProgress?.(75);

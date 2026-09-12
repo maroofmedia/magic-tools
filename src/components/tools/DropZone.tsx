@@ -30,7 +30,7 @@ export default function DropZone({
 
   const validate = useCallback((files: File[]): string | null => {
     for (const file of files) {
-      const typeErr = validateFileType(file, acceptedTypes);
+      const typeErr = validateFileType(file, acceptedTypes, acceptedExtensions);
       if (typeErr) return typeErr;
       const sizeErr = validateFileSize(file, maxSizeMB);
       if (sizeErr) return sizeErr;
@@ -42,7 +42,7 @@ export default function DropZone({
       }
     }
     return null;
-  }, [acceptedTypes, maxSizeMB, maxTotalSizeMB]);
+  }, [acceptedTypes, acceptedExtensions, maxSizeMB, maxTotalSizeMB]);
 
   const handleFiles = useCallback((rawFiles: FileList | File[] | null) => {
     if (!rawFiles || (rawFiles as any).length === 0) return;
@@ -155,7 +155,7 @@ export default function DropZone({
           ref={inputRef}
           type="file"
           class="sr-only"
-          accept={acceptedTypes.join(',')}
+          accept={[...acceptedTypes, ...acceptedExtensions].join(',')}
           multiple={multiFile}
           aria-hidden="true"
           tabIndex={-1}

@@ -33,47 +33,61 @@ export default function FileThumbnailStrip({
   const [thumbnails, setThumbnails] = useState<Record<number, string | null>>({});
   const [draggedIdx, setDraggedIdx] = useState<number | null>(null);
   const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
-  const createdUrlsRef = useRef<string[]>([]);
+  const activeUrlsRef = useRef<Map<File, string>>(new Map());
 
   // Load and cache thumbnails whenever files change
   useEffect(() => {
     let isMounted = true;
+    const currentFiles = new Set(files);
 
-    // Revoke previous object URLs
-    createdUrlsRef.current.forEach((url) => {
-      if (url.startsWith('blob:')) {
-        URL.revokeObjectURL(url);
+    // Revoke object URLs only for files that were genuinely removed
+    for (const [file, url] of activeUrlsRef.current.entries()) {
+      if (!currentFiles.has(file)) {
+        if (url.startsWith('blob:')) {
+          URL.revokeObjectURL(url);
+        }
+        activeUrlsRef.current.delete(file);
+      }
+    }
+
+    // Populate initial state from active cache
+    const initialThumbnails: Record<number, string | null> = {};
+    files.forEach((file, index) => {
+      if (activeUrlsRef.current.has(file)) {
+        initialThumbnails[index] = activeUrlsRef.current.get(file)!;
       }
     });
-    createdUrlsRef.current = [];
+    setThumbnails(initialThumbnails);
 
-    const newThumbnails: Record<number, string | null> = {};
-
+    // Fetch thumbnails for any files not yet in cache
     files.forEach((file, index) => {
+      if (activeUrlsRef.current.has(file)) return;
+
       generateFileThumbnail(file).then((url) => {
-        if (!isMounted) {
-          if (url && url.startsWith('blob:')) URL.revokeObjectURL(url);
-          return;
-        }
+        if (!isMounted) return;
         if (url) {
-          if (url.startsWith('blob:')) {
-            createdUrlsRef.current.push(url);
-          }
+          activeUrlsRef.current.set(file, url);
           setThumbnails((prev) => ({ ...prev, [index]: url }));
         }
       });
     });
 
-    setThumbnails(newThumbnails);
-
     return () => {
       isMounted = false;
-      createdUrlsRef.current.forEach((url) => {
-        if (url.startsWith('blob:')) URL.revokeObjectURL(url);
-      });
-      createdUrlsRef.current = [];
     };
   }, [files]);
+
+  // Clean up all object URLs on component unmount
+  useEffect(() => {
+    return () => {
+      for (const [_, url] of activeUrlsRef.current.entries()) {
+        if (url.startsWith('blob:')) {
+          URL.revokeObjectURL(url);
+        }
+      }
+      activeUrlsRef.current.clear();
+    };
+  }, []);
 
   if (files.length === 0) return null;
 
@@ -152,7 +166,9 @@ export default function FileThumbnailStrip({
       <div class="space-y-2 max-h-[480px] overflow-y-auto pr-1 scrollbar-thin">
         {files.map((file, index) => {
           const thumbUrl = thumbnails[index];
-          const isImage = file.type.startsWith('image/') || /\.(jpg|jpeg|png|webp|gif|svg|avif)$/i.test(file.name);
+          const isImage =
+            file.type.startsWith('image/') ||
+            /\.(jpg|jpeg|png|webp|gif|svg|avif|bmp|ico|heic|heif|hif)$/i.test(file.name);
           const isPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name);
           const ext = file.name.split('.').pop()?.toUpperCase() || 'FILE';
 
