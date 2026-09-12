@@ -9,6 +9,48 @@ export const TOOLS: ToolConfig[] = [
   // ── IMAGE TOOLS ──────────────────────────────
 
   {
+    slug: 'remove-metadata',
+    name: 'Remove Metadata',
+    description: 'Strip EXIF, GPS location, and camera tags with 0% quality loss.',
+    longDescription:
+      'Securely remove EXIF data, GPS location, camera settings, timestamps, and personal metadata from your photos 100% locally on your device. Zero quality loss, no server uploads, supporting all image formats.',
+    category: 'image',
+    icon: '🛡️',
+    acceptedTypes: [
+      'image/jpeg',
+      'image/png',
+      'image/webp',
+      'image/gif',
+      'image/svg+xml',
+      'image/avif',
+      'image/bmp',
+      'image/tiff',
+      'image/x-icon',
+      'image/heic',
+      'image/heif',
+    ],
+    acceptedExtensions: [
+      '.jpg',
+      '.jpeg',
+      '.png',
+      '.webp',
+      '.gif',
+      '.svg',
+      '.avif',
+      '.bmp',
+      '.tiff',
+      '.tif',
+      '.ico',
+      '.heic',
+    ],
+    multiFile: true,
+    maxSizeMB: 50,
+    maxTotalSizeMB: 500,
+    metaDescription:
+      'Remove EXIF data, GPS coordinates, and camera metadata from images online for free without losing quality. 100% private and on-device.',
+    featured: true,
+  },
+  {
     slug: 'compress-image',
     name: 'Compress Image',
     description: 'Reduce image file size while keeping good quality.',

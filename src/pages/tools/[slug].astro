@@ -7,6 +7,7 @@
 import ToolLayout from '@/layouts/ToolLayout.astro';
 import ToastContainer from '@/components/common/Toast';
 import CompressImageTool from '@/components/tools/islands/CompressImageTool';
+import RemoveMetadataTool from '@/components/tools/islands/RemoveMetadataTool';
 import ConvertFormatTool from '@/components/tools/islands/ConvertFormatTool';
 import ImageToPdfTool from '@/components/tools/islands/ImageToPdfTool';
 import MergePdfTool from '@/components/tools/islands/MergePdfTool';
@@ -31,6 +32,9 @@ const slug = tool.slug;
 <ToolLayout tool={tool}>
   <ToastContainer client:load />
 
+  {slug === 'remove-metadata' && (
+    <RemoveMetadataTool tool={tool} client:load />
+  )}
   {slug === 'compress-image' && (
     <CompressImageTool tool={tool} client:load />
   )}
