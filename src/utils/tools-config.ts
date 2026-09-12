@@ -42,6 +42,7 @@ export const TOOLS: ToolConfig[] = [
       '.tif',
       '.ico',
       '.heic',
+      '.heif',
     ],
     multiFile: true,
     maxSizeMB: 50,

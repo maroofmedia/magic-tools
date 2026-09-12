@@ -94,6 +94,8 @@ export async function extractImageMetadata(file: File): Promise<ExtractedMetadat
       parseGifMetadata(bytes, result);
     } else if (isSvg(bytes, file.type)) {
       await parseSvgMetadata(file, result);
+    } else if (isHeic(bytes, file.name, file.type)) {
+      parseHeicMetadata(bytes, result);
     } else if (isTiff(bytes)) {
       parseTiffMetadata(bytes, 0, result);
     }
@@ -125,6 +127,7 @@ export async function stripImageMetadata(
   const buffer = await file.arrayBuffer();
   const bytes = new Uint8Array(buffer);
   let cleanedBlob: Blob;
+  let outputName = file.name;
 
   if (isJpeg(bytes)) {
     cleanedBlob = stripJpegBinary(bytes, options);
@@ -136,6 +139,9 @@ export async function stripImageMetadata(
     cleanedBlob = stripGifBinary(bytes, options);
   } else if (isSvg(bytes, file.type)) {
     cleanedBlob = await stripSvgText(file);
+  } else if (isHeic(bytes, file.name, file.type)) {
+    cleanedBlob = await stripHeicMetadata(file, options, onProgress);
+    outputName = file.name.replace(/\.(heic|heif|hif)$/i, '.jpg');
   } else if (isTiff(bytes)) {
     cleanedBlob = stripTiffBinary(bytes, options);
   } else if (isBmp(bytes)) {
@@ -151,7 +157,7 @@ export async function stripImageMetadata(
   onProgress?.(100);
 
   return {
-    name: file.name,
+    name: outputName,
     blob: cleanedBlob,
     size: formatBytes(cleanedBlob.size),
     originalSize: file.size,
@@ -878,7 +884,88 @@ async function stripSvgText(file: File): Promise<Blob> {
 }
 
 // ─────────────────────────────────────────────────────────────────────────
-// 8. TIFF & BMP Parsers & Binary Handlers
+// 8. HEIC / HEIF Parser & Stripper
+// ─────────────────────────────────────────────────────────────────────────
+
+function isHeic(bytes: Uint8Array, fileName: string, mimeType?: string): boolean {
+  if (mimeType === 'image/heic' || mimeType === 'image/heif') return true;
+  if (/\.(heic|heif|hif)$/i.test(fileName)) return true;
+  if (bytes.length >= 12 && isAscii(bytes, 4, 'ftyp')) {
+    const brand = decodeAscii(bytes, 8, 4).toLowerCase();
+    if (['heic', 'heix', 'hevc', 'heim', 'heis', 'hevm', 'hevs', 'mif1', 'msf1'].includes(brand)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function parseHeicMetadata(bytes: Uint8Array, out: ExtractedMetadata) {
+  out.detectedBlocks.push({
+    name: 'HEIC Container Metadata',
+    description: 'High Efficiency Image Container with embedded EXIF & GPS',
+  });
+
+  // Search for TIFF header or Exif header within binary bytes
+  const len = bytes.length;
+  for (let i = 0; i < Math.min(len - 12, 120000); i++) {
+    // Check for 'Exif\0\0'
+    if (isAscii(bytes, i, 'Exif\0\0')) {
+      out.detectedBlocks.push({
+        name: 'HEIC EXIF Stream',
+        description: 'Apple / Smartphone EXIF camera and GPS data',
+      });
+      parseTiffMetadata(bytes, i + 6, out);
+      return;
+    }
+    // Check for 'II*\0' (Little Endian TIFF) or 'MM\0*' (Big Endian TIFF)
+    if (
+      (bytes[i] === 0x49 && bytes[i + 1] === 0x49 && bytes[i + 2] === 0x2a && bytes[i + 3] === 0x00) ||
+      (bytes[i] === 0x4d && bytes[i + 1] === 0x4d && bytes[i + 2] === 0x00 && bytes[i + 3] === 0x2a)
+    ) {
+      const isLE = bytes[i] === 0x49;
+      const ifdOffset = isLE
+        ? (bytes[i + 4] | (bytes[i + 5] << 8) | (bytes[i + 6] << 16) | (bytes[i + 7] << 24)) >>> 0
+        : ((bytes[i + 4] << 24) | (bytes[i + 5] << 16) | (bytes[i + 6] << 8) | bytes[i + 7]) >>> 0;
+
+      if (ifdOffset >= 8 && ifdOffset < 65536 && i + ifdOffset + 2 < len) {
+        out.detectedBlocks.push({
+          name: 'HEIC EXIF Stream',
+          description: 'Apple / Smartphone EXIF camera and GPS data',
+        });
+        parseTiffMetadata(bytes, i, out);
+        return;
+      }
+    }
+  }
+}
+
+async function stripHeicMetadata(
+  file: File,
+  options: MetadataStripOptions,
+  onProgress?: (pct: number) => void,
+): Promise<Blob> {
+  onProgress?.(45);
+  try {
+    const heic2any = (await import('heic2any')).default;
+    const converted = await heic2any({
+      blob: file,
+      toType: 'image/jpeg',
+      quality: 1.0,
+    });
+    const blob = Array.isArray(converted) ? converted[0] : converted;
+    const arrayBuf = await blob.arrayBuffer();
+    const bytes = new Uint8Array(arrayBuf);
+    onProgress?.(75);
+    // Strip all residual metadata from converted JPEG stream
+    return stripJpegBinary(bytes, options);
+  } catch (err) {
+    console.warn('heic2any processing fallback to canvas:', err);
+    return await stripCanvasLosslessFallback(file);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// 9. TIFF & BMP Parsers & Binary Handlers
 // ─────────────────────────────────────────────────────────────────────────
 
 function isTiff(bytes: Uint8Array): boolean {

@@ -3,6 +3,7 @@
  */
 
 const pdfThumbnailCache = new WeakMap<File, string>();
+const heicThumbnailCache = new WeakMap<File, string>();
 
 /**
  * Generate a thumbnail preview URL for an image or PDF file.
@@ -11,7 +12,34 @@ const pdfThumbnailCache = new WeakMap<File, string>();
 export async function generateFileThumbnail(file: File): Promise<string | null> {
   if (!file) return null;
 
-  // 1. Direct Object URL for standard browser image formats
+  // 1. HEIC / HEIF format handling (convert on-device for browser thumbnail preview)
+  const isHeic =
+    file.type === 'image/heic' ||
+    file.type === 'image/heif' ||
+    /\.(heic|heif|hif)$/i.test(file.name);
+
+  if (isHeic) {
+    if (heicThumbnailCache.has(file)) {
+      return heicThumbnailCache.get(file)!;
+    }
+    try {
+      const heic2any = (await import('heic2any')).default;
+      const blob = await heic2any({
+        blob: file,
+        toType: 'image/jpeg',
+        quality: 0.8,
+      });
+      const single = Array.isArray(blob) ? blob[0] : blob;
+      const url = URL.createObjectURL(single);
+      heicThumbnailCache.set(file, url);
+      return url;
+    } catch (err) {
+      console.warn('HEIC thumbnail generation failed:', err);
+      return null;
+    }
+  }
+
+  // 2. Direct Object URL for standard browser image formats
   if (file.type.startsWith('image/') || /\.(jpg|jpeg|png|webp|gif|svg|avif|bmp|ico)$/i.test(file.name)) {
     return URL.createObjectURL(file);
   }

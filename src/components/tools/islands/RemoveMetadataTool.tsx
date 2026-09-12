@@ -147,27 +147,7 @@ export default function RemoveMetadataTool({ tool }: Props) {
   const isDone = status === 'done';
 
   return (
-    <div class="space-y-5 max-w-3xl mx-auto">
-      {/* 100% Lossless Guarantee Banner */}
-      <div class="flex items-center gap-3 p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-indigo-500/10 border border-emerald-500/20 dark:border-emerald-500/30 backdrop-blur-xs shadow-2xs">
-        <div class="w-9 h-9 rounded-xl bg-emerald-500 text-white flex items-center justify-center text-lg flex-shrink-0 shadow-xs">
-          🛡️
-        </div>
-        <div class="min-w-0 flex-1">
-          <div class="flex items-center gap-2">
-            <span class="font-display font-bold text-xs sm:text-sm text-neutral-900 dark:text-white">
-              100% On-Device & Lossless Guarantee
-            </span>
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
-              Zero Quality Loss
-            </span>
-          </div>
-          <p class="text-xs text-neutral-600 dark:text-neutral-400 mt-0.5 leading-relaxed">
-            Direct binary stream stripping preserves your image pixels bit-for-bit without re-encoding. No server uploads.
-          </p>
-        </div>
-      </div>
-
+    <div class="space-y-4 max-w-3xl mx-auto">
       {/* Drop Zone when no files */}
       {files.length === 0 && !isDone && (
         <DropZone
