@@ -14,6 +14,7 @@ import MergePdfTool from '@/components/tools/islands/MergePdfTool';
 import SplitPdfTool from '@/components/tools/islands/SplitPdfTool';
 import CompressPdfTool from '@/components/tools/islands/CompressPdfTool';
 import PdfToImagesTool from '@/components/tools/islands/PdfToImagesTool';
+import SpreadsheetEditorTool from '@/components/tools/islands/SpreadsheetEditorTool';
 import { TOOLS } from '@/utils/tools-config';
 import type { ToolConfig } from '@/types/index';
 
@@ -34,6 +35,9 @@ const slug = tool.slug;
 
   {slug === 'remove-metadata' && (
     <RemoveMetadataTool tool={tool} client:load />
+  )}
+  {slug === 'edit-spreadsheet' && (
+    <SpreadsheetEditorTool tool={tool} client:load />
   )}
   {slug === 'compress-image' && (
     <CompressImageTool tool={tool} client:load />

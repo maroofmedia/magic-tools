@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────
 
 /** Categories available for tools */
-export type ToolCategory = 'image' | 'pdf';
+export type ToolCategory = 'image' | 'pdf' | 'spreadsheet';
 
 /** Processing status */
 export type ProcessStatus = 'idle' | 'loading' | 'processing' | 'done' | 'error';

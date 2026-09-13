@@ -26,7 +26,11 @@ const schema = buildToolSchema({
   ],
 });
 
-const categoryLabel = tool.category === 'image' ? 'Image Tools' : 'PDF Tools';
+const categoryLabel = tool.category === 'image' 
+  ? 'Image Tools' 
+  : tool.category === 'spreadsheet' 
+  ? 'Spreadsheet Tools' 
+  : 'PDF Tools';
 ---
 
 <BaseLayout
@@ -62,7 +66,13 @@ const categoryLabel = tool.category === 'image' ? 'Image Tools' : 'PDF Tools';
           </div>
           <div class="min-w-0 flex-1">
             <div class="flex flex-wrap items-center gap-1.5 mb-1">
-              <span class={`text-[9px] sm:text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded ${tool.category === 'image' ? 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200/60 dark:border-purple-800/50' : 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/50'}`}>
+              <span class={`text-[9px] sm:text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded ${
+                tool.category === 'image' 
+                  ? 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200/60 dark:border-purple-800/50' 
+                  : tool.category === 'spreadsheet'
+                  ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/50'
+                  : 'bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800/50'
+              }`}>
                 {tool.category} tool
               </span>
             </div>

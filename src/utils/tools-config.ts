@@ -243,6 +243,32 @@ export const TOOLS: ToolConfig[] = [
     metaDescription:
       'Convert PDF pages to high-quality JPG or PNG images online for free.',
   },
+
+  // ── SPREADSHEET TOOLS ───────────────────────
+
+  {
+    slug: 'edit-spreadsheet',
+    name: 'Spreadsheet Editor',
+    description: 'View, edit, undo/redo, and export Excel, CSV, TSV & Google Sheets online.',
+    longDescription:
+      'Open, view, and edit Excel (.xlsx, .xls), CSV, TSV, and Google Sheets exports (.ods) directly in your browser. Features cell inline editing, change tracking with individual revert, global undo/redo, formula bar, multi-sheet tabs, and instant export—100% locally on-device.',
+    category: 'spreadsheet',
+    icon: '📊',
+    acceptedTypes: [
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'application/vnd.ms-excel',
+      'text/csv',
+      'text/tab-separated-values',
+      'text/plain',
+      'application/vnd.oasis.opendocument.spreadsheet',
+    ],
+    acceptedExtensions: ['.xlsx', '.xls', '.csv', '.tsv', '.ods', '.xlsm'],
+    multiFile: false,
+    maxSizeMB: 50,
+    metaDescription:
+      'Free online spreadsheet viewer and editor. Edit Excel, CSV, TSV, and Google Sheets files directly in your browser with change tracking and undo/redo. 100% on-device & private.',
+    featured: true,
+  },
 ];
 
 /** Lookup a tool by slug */
@@ -273,5 +299,11 @@ export const CATEGORIES: { id: ToolCategory; label: string; icon: string; descri
     label: 'PDF Tools',
     icon: '📄',
     description: 'Merge, split, compress, and convert PDF documents.',
+  },
+  {
+    id: 'spreadsheet',
+    label: 'Spreadsheet Tools',
+    icon: '📊',
+    description: 'View, edit, track changes, and convert Excel, CSV, and sheets.',
   },
 ];
