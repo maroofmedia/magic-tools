@@ -884,10 +884,19 @@ export default function SpreadsheetEditorTool({ tool }: Props) {
                 <button
                   type="button"
                   onClick={() => setIsExpanded(!isExpanded)}
-                  class="p-1.5 sm:px-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 text-xs font-bold transition-all shadow-2xs cursor-pointer"
+                  class="p-1.5 sm:px-2 rounded-xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 text-xs font-bold transition-all shadow-2xs cursor-pointer flex items-center justify-center"
                   title={isExpanded ? 'Collapse View' : 'Expand Fullscreen'}
+                  aria-label={isExpanded ? 'Collapse View' : 'Expand Fullscreen'}
                 >
-                  {isExpanded ? '🗗' : '🗖'}
+                  {isExpanded ? (
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 4v4H5m0 0l5-5M9 20v-4H5m0 0l5 5m6-16v4h4m0 0l-5-5m5 16v-4h-4m0 0l5 5" />
+                    </svg>
+                  ) : (
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5h-4m4 0v-4m0 4l-5-5" />
+                    </svg>
+                  )}
                 </button>
 
                 {/* Export / Download Button */}
