@@ -1,0 +1,305 @@
+---
+/**
+ * 404 Page
+ * Magic Tools
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+import SearchBar from '@/components/home/SearchBar';
+import { getFeaturedTools } from '@/utils/tools-config';
+
+// 4 top featured tools for a clean 2x2 grid
+const popularTools = getFeaturedTools().slice(0, 4);
+---
+
+<BaseLayout
+  title="404 — Page Not Found"
+  description="Looks like this page vanished into thin air. Search for free, private image, PDF, and spreadsheet tools."
+  noindex={true}
+>
+  <Header />
+
+  <main id="main-content" class="min-h-[calc(100vh-3.5rem)] pt-14 flex-1 flex flex-col justify-center relative overflow-hidden">
+    <!-- Ambient subtle glow -->
+    <div class="absolute inset-0 -z-10 pointer-events-none overflow-hidden" aria-hidden="true">
+      <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] sm:w-[620px] h-[260px] bg-gradient-to-tr from-brand-500/15 via-purple-500/10 to-pink-500/10 dark:from-brand-500/10 dark:via-purple-500/10 dark:to-indigo-500/10 rounded-full blur-[90px]"></div>
+      <!-- Subtle dot grid -->
+      <div class="absolute inset-0 bg-[radial-gradient(#6366f1_1px,transparent_1px)] [background-size:20px_20px] opacity-[0.07] dark:opacity-[0.10]"></div>
+    </div>
+
+    <div class="container py-8 sm:py-10 max-w-2xl relative z-10 flex flex-col items-center text-center">
+      
+      <!-- Status Badge -->
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/80 dark:bg-neutral-900/80 border border-neutral-200/80 dark:border-neutral-800 text-[11px] font-medium text-neutral-600 dark:text-neutral-300 shadow-2xs glass mb-2.5 animate-fade-in">
+        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+        <span class="font-mono font-semibold text-brand-600 dark:text-brand-400">404</span>
+        <span class="text-neutral-300 dark:text-neutral-700">•</span>
+        <span>Page Not Found</span>
+      </div>
+
+      <!-- Sleek 404 Visual with Vector SVG Magic Wand -->
+      <div class="relative flex items-center justify-center my-1 select-none animate-fade-in-up" aria-hidden="true">
+        
+        <!-- "4" Left -->
+        <span class="font-display font-black text-6xl sm:text-7xl md:text-8xl leading-none tracking-tight text-neutral-900/90 dark:text-white/90">
+          4
+        </span>
+
+        <!-- Glowing Magic Portal Orb (100% Vector SVG, crisp everywhere) -->
+        <div
+          class="relative mx-3 w-16 h-16 sm:w-20 sm:h-20 md:w-22 md:h-22 flex items-center justify-center group cursor-pointer"
+          id="portal-orb"
+          title="Click to cast magic sparkles!"
+        >
+          <!-- Outer Pulsing Aura -->
+          <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-brand-600 via-indigo-500 to-fuchsia-500 opacity-70 blur-md group-hover:opacity-100 group-hover:blur-lg transition-all duration-300 animate-pulse"></div>
+          
+          <!-- Orbiting SVG Dash Ring -->
+          <svg class="absolute -inset-1.5 w-[calc(100%+0.75rem)] h-[calc(100%+0.75rem)] text-brand-400/50 dark:text-brand-400/40 animate-spin-slow pointer-events-none" viewBox="0 0 100 100" fill="none">
+            <circle cx="50" cy="50" r="46" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 6" />
+          </svg>
+
+          <!-- Orbiting SVG Dot Ring -->
+          <svg class="absolute -inset-3 w-[calc(100%+1.5rem)] h-[calc(100%+1.5rem)] text-purple-400/40 dark:text-purple-400/30 animate-spin-reverse pointer-events-none" viewBox="0 0 100 100" fill="none">
+            <circle cx="50" cy="50" r="46" stroke="currentColor" stroke-width="1" stroke-dasharray="2 8" />
+          </svg>
+          
+          <!-- Core Glass Sphere -->
+          <div class="relative w-full h-full rounded-full bg-gradient-to-br from-white/95 via-brand-50/70 to-purple-100/60 dark:from-neutral-900/95 dark:via-neutral-900/80 dark:to-brand-950/90 border border-white/80 dark:border-neutral-700/60 shadow-lg glass flex items-center justify-center overflow-hidden transition-all duration-300 group-hover:scale-105">
+            <!-- Shimmer Top Light -->
+            <div class="absolute -top-3 -left-3 w-10 h-10 bg-white/60 dark:bg-white/20 rounded-full blur-xs pointer-events-none"></div>
+
+            <!-- Crisp Vector Magic Wand -->
+            <svg
+              class="w-7 h-7 sm:w-8 sm:h-8 text-brand-600 dark:text-brand-400 group-hover:rotate-12 group-hover:scale-110 transition-transform duration-300 drop-shadow-[0_2px_8px_rgba(99,102,241,0.4)]"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="m19 5-3 3" />
+              <path d="m2 22 10-10" />
+              <path d="m6.5 14.5 3 3" />
+              <path d="m19 2 .6 1.4L21 4l-1.4.6L19 6l-.6-1.4L17 4l1.4-.6z" fill="currentColor" />
+              <path d="m13 6 .4.8.8.4-.8.4-.4.8-.4-.8-.8-.4.8-.4z" fill="currentColor" />
+              <path d="m20 9 .4.8.8.4-.8.4-.4.8-.4-.8-.8-.4.8-.4z" fill="currentColor" />
+            </svg>
+          </div>
+
+          <!-- Floating Vector SVG Sparkles -->
+          <svg class="absolute -top-1 right-0 w-3.5 h-3.5 text-amber-400 dark:text-amber-300 animate-bounce pointer-events-none" style="animation-duration: 2s;" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l2.4 7.4h7.6l-6.2 4.5 2.4 7.4-6.2-4.5-6.2 4.5 2.4-7.4-6.2-4.5h7.6z"/>
+          </svg>
+          <svg class="absolute -bottom-1 -left-0.5 w-3 h-3 text-purple-400 dark:text-purple-300 animate-bounce pointer-events-none" style="animation-duration: 2.6s; animation-delay: 0.3s;" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l2.4 7.4h7.6l-6.2 4.5 2.4 7.4-6.2-4.5-6.2 4.5 2.4-7.4-6.2-4.5h7.6z"/>
+          </svg>
+        </div>
+
+        <!-- "4" Right -->
+        <span class="font-display font-black text-6xl sm:text-7xl md:text-8xl leading-none tracking-tight text-neutral-900/90 dark:text-white/90">
+          4
+        </span>
+      </div>
+
+      <!-- Headline & Subtitle -->
+      <div class="max-w-md mx-auto space-y-1 mb-5">
+        <h1 class="font-display text-xl sm:text-2xl font-bold tracking-tight text-neutral-900 dark:text-white">
+          Page vanished into the <span class="gradient-text">magic void</span>
+        </h1>
+        <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+          The page you are looking for doesn't exist or has moved. Search for a tool below:
+        </p>
+      </div>
+
+      <!-- Prominent Live Search Bar -->
+      <div class="w-full max-w-lg mb-6">
+        <SearchBar client:load />
+      </div>
+
+      <!-- Popular Tools Quick Selection -->
+      <div class="w-full max-w-xl text-left mb-6">
+        <div class="flex items-center justify-between mb-2.5 px-0.5">
+          <span class="text-xs font-semibold text-neutral-700 dark:text-neutral-300 flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-brand-500" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l2.4 7.4h7.6l-6.2 4.5 2.4 7.4-6.2-4.5-6.2 4.5 2.4-7.4-6.2-4.5h7.6z"/>
+            </svg>
+            Popular Tools
+          </span>
+          <a
+            href="/#tools"
+            class="text-[11px] font-semibold text-brand-600 dark:text-brand-400 hover:underline inline-flex items-center gap-0.5"
+          >
+            <span>Browse all tools</span>
+            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          {popularTools.map((tool) => (
+            <a
+              href={`/tools/${tool.slug}`}
+              class="group flex items-center gap-2.5 p-2.5 rounded-xl bg-white dark:bg-neutral-900/90 hover:bg-brand-50/50 dark:hover:bg-neutral-800/80 border border-neutral-200/80 dark:border-neutral-800 hover:border-brand-300 dark:hover:border-brand-500/40 shadow-2xs hover:shadow-xs transition-all duration-150 card-hover"
+            >
+              <div class="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-neutral-800 group-hover:bg-white dark:group-hover:bg-neutral-700 flex items-center justify-center text-sm flex-shrink-0 transition-transform duration-150 group-hover:scale-105 shadow-2xs">
+                {tool.icon}
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center justify-between gap-1">
+                  <h3 class="text-xs font-semibold text-neutral-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors truncate">
+                    {tool.name}
+                  </h3>
+                  <span class={`text-[8px] font-semibold px-1.5 py-0.2 rounded uppercase tracking-wider ${tool.category === 'image' ? 'bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400' : tool.category === 'pdf' ? 'bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400' : 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400'}`}>
+                    {tool.category}
+                  </span>
+                </div>
+                <p class="text-[10px] text-neutral-500 dark:text-neutral-400 truncate mt-0.5">
+                  {tool.description}
+                </p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- Grounding "Back to Home" Button at the Bottom -->
+      <div class="pt-2">
+        <a
+          href="/"
+          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-white text-white dark:text-neutral-900 font-medium text-xs shadow-xs hover:shadow-md transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0"
+        >
+          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+          </svg>
+          <span>Return to Homepage</span>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Interactive Sparkle Canvas Layer -->
+  <canvas id="sparkle-canvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes spin-reverse {
+    from { transform: rotate(360deg); }
+    to { transform: rotate(0deg); }
+  }
+
+  .animate-spin-slow {
+    animation: spin-slow 22s linear infinite;
+  }
+  .animate-spin-reverse {
+    animation: spin-reverse 28s linear infinite;
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    // Interactive Particle Sparkle System on Click
+    const canvas = document.getElementById('sparkle-canvas');
+    const portalOrb = document.getElementById('portal-orb');
+    if (!canvas || !portalOrb) return;
+
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let animationId = null;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    class SparkleParticle {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 4 + 1.5;
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed;
+        this.size = Math.random() * 3.5 + 1.5;
+        this.maxLife = Math.random() * 35 + 25;
+        this.life = 0;
+        const colors = ['#818cf8', '#a78bfa', '#f472b6', '#38bdf8', '#fbbf24', '#ffffff'];
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.spin = Math.random() * 0.2 - 0.1;
+        this.rotation = Math.random() * Math.PI * 2;
+      }
+
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += 0.07;
+        this.vx *= 0.96;
+        this.vy *= 0.96;
+        this.life++;
+        this.rotation += this.spin;
+        return this.life < this.maxLife;
+      }
+
+      draw(c) {
+        const progress = this.life / this.maxLife;
+        const alpha = 1 - progress;
+        c.save();
+        c.translate(this.x, this.y);
+        c.rotate(this.rotation);
+        c.fillStyle = this.color;
+        c.globalAlpha = alpha;
+
+        const r = this.size * (1 - progress * 0.5);
+        c.beginPath();
+        c.moveTo(0, -r * 2);
+        c.quadraticCurveTo(0, 0, r * 2, 0);
+        c.quadraticCurveTo(0, 0, 0, r * 2);
+        c.quadraticCurveTo(0, 0, -r * 2, 0);
+        c.quadraticCurveTo(0, 0, 0, -r * 2);
+        c.fill();
+        c.restore();
+      }
+    }
+
+    function createBurst(originX, originY, count = 28) {
+      for (let i = 0; i < count; i++) {
+        particles.push(new SparkleParticle(originX, originY));
+      }
+      if (!animationId) {
+        animate();
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles = particles.filter(p => {
+        p.draw(ctx);
+        return p.update();
+      });
+
+      if (particles.length > 0) {
+        animationId = requestAnimationFrame(animate);
+      } else {
+        animationId = null;
+      }
+    }
+
+    portalOrb.addEventListener('click', () => {
+      const rect = portalOrb.getBoundingClientRect();
+      createBurst(rect.left + rect.width / 2, rect.top + rect.height / 2, 32);
+    });
+  })();
+</script>
