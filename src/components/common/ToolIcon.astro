@@ -159,3 +159,14 @@ const { slug, className = 'w-10 h-10' } = Astro.props;
     </svg>
   </div>
 )}
+
+{slug === 'markdown-editor' && (
+  <div class={`${className} rounded-xl bg-indigo-500/10 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-400 flex items-center justify-center flex-shrink-0`}>
+    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="3" width="18" height="18" rx="3"/>
+      <path d="M7 15V9l3 3 3-3v6"/>
+      <path d="M17 12l-2 3-2-3"/>
+      <path d="M15 9v6"/>
+    </svg>
+  </div>
+)}

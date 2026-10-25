@@ -8,6 +8,7 @@ import { TOOLS } from '@/utils/tools-config';
 const imageTools = TOOLS.filter((t) => t.category === 'image');
 const pdfTools = TOOLS.filter((t) => t.category === 'pdf');
 const spreadsheetTools = TOOLS.filter((t) => t.category === 'spreadsheet');
+const documentTools = TOOLS.filter((t) => t.category === 'document');
 ---
 
 <section id="tools" class="py-8 sm:py-12 scroll-mt-14">
@@ -63,6 +64,26 @@ const spreadsheetTools = TOOLS.filter((t) => t.category === 'spreadsheet');
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-3.5">
           {spreadsheetTools.map((tool) => (
+            <ToolCard tool={tool} animate={false} />
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Document & Text Tools -->
+    {documentTools.length > 0 && (
+      <div id="document" class="scroll-mt-20">
+        <div class="pb-3 mb-4 border-b border-neutral-200/80 dark:border-neutral-800/80">
+          <h2 class="font-display text-lg sm:text-xl font-bold text-neutral-900 dark:text-white">
+            Document & Text Tools
+          </h2>
+          <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+            Write, edit, and preview Markdown and rich text documents in real-time
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-3.5">
+          {documentTools.map((tool) => (
             <ToolCard tool={tool} animate={false} />
           ))}
         </div>

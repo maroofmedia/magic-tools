@@ -137,6 +137,17 @@ a {
   border-radius: 6px;
 }
 
+/* Exclude markdown editor textarea from global focus-visible outline */
+.markdown-editor-textarea,
+.markdown-editor-textarea:focus,
+.markdown-editor-textarea:focus-visible {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  -webkit-box-shadow: none !important;
+}
+
 /* ── Selection ── */
 ::selection {
   @apply bg-brand-500/20 text-brand-900;
@@ -268,4 +279,222 @@ input[type="range"]::-webkit-slider-thumb:hover {
 
 .section-padding {
   @apply py-8 sm:py-10 lg:py-12;
+}
+
+/* ── Markdown Preview Typography & Elements ── */
+.markdown-preview {
+  font-family: var(--font-sans);
+  line-height: 1.65;
+  color: var(--color-neutral-800);
+  word-break: break-word;
+}
+.dark .markdown-preview {
+  color: var(--color-neutral-200);
+}
+
+.markdown-preview h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--color-neutral-200);
+  color: var(--color-neutral-900);
+}
+.dark .markdown-preview h1 {
+  border-bottom-color: var(--color-neutral-800);
+  color: var(--color-neutral-100);
+}
+
+.markdown-preview h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-top: 1.35rem;
+  margin-bottom: 0.65rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--color-neutral-200);
+  color: var(--color-neutral-900);
+}
+.dark .markdown-preview h2 {
+  border-bottom-color: var(--color-neutral-800);
+  color: var(--color-neutral-100);
+}
+
+.markdown-preview h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-top: 1.15rem;
+  margin-bottom: 0.5rem;
+  color: var(--color-neutral-900);
+}
+.dark .markdown-preview h3 {
+  color: var(--color-neutral-100);
+}
+
+.markdown-preview h4,
+.markdown-preview h5,
+.markdown-preview h6 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 0.4rem;
+}
+
+.markdown-preview p {
+  margin-bottom: 0.9rem;
+}
+
+.markdown-preview ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.9rem;
+}
+
+.markdown-preview ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.9rem;
+}
+
+.markdown-preview li {
+  margin-bottom: 0.25rem;
+}
+
+.markdown-preview li > ul,
+.markdown-preview li > ol {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.markdown-preview blockquote {
+  border-left: 4px solid var(--color-brand-500);
+  background: rgba(99, 102, 241, 0.05);
+  padding: 0.6rem 1rem;
+  margin: 1rem 0;
+  border-radius: 0 0.5rem 0.5rem 0;
+  font-style: italic;
+  color: var(--color-neutral-700);
+}
+.dark .markdown-preview blockquote {
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--color-neutral-300);
+}
+
+.markdown-preview pre {
+  background: #0f172a;
+  color: #f8fafc;
+  padding: 1rem;
+  border-radius: 0.625rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.dark .markdown-preview pre {
+  background: #020617;
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.markdown-preview code {
+  font-family: var(--font-mono);
+}
+
+.markdown-preview :not(pre) > code {
+  font-size: 0.85em;
+  padding: 0.15rem 0.35rem;
+  border-radius: 0.25rem;
+  background: var(--color-neutral-100);
+  color: var(--color-brand-600);
+  border: 1px solid var(--color-neutral-200);
+}
+.dark .markdown-preview :not(pre) > code {
+  background: var(--color-neutral-800);
+  color: var(--color-brand-300);
+  border-color: var(--color-neutral-700);
+}
+
+.markdown-preview table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.875rem;
+  border: 1px solid var(--color-neutral-200);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+.dark .markdown-preview table {
+  border-color: var(--color-neutral-800);
+}
+
+.markdown-preview th {
+  background: var(--color-neutral-100);
+  font-weight: 600;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+.dark .markdown-preview th {
+  background: var(--color-neutral-800);
+  border-color: var(--color-neutral-700);
+}
+
+.markdown-preview td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+.dark .markdown-preview td {
+  border-color: var(--color-neutral-800);
+}
+
+.markdown-preview tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.015);
+}
+.dark .markdown-preview tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.markdown-preview hr {
+  margin: 1.5rem 0;
+  border: none;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--color-neutral-300), transparent);
+}
+.dark .markdown-preview hr {
+  background: linear-gradient(to right, transparent, var(--color-neutral-700), transparent);
+}
+
+.markdown-preview a {
+  color: var(--color-brand-600);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 500;
+}
+.dark .markdown-preview a {
+  color: var(--color-brand-400);
+}
+.markdown-preview a:hover {
+  color: var(--color-brand-700);
+}
+.dark .markdown-preview a:hover {
+  color: var(--color-brand-300);
+}
+
+.markdown-preview img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+  border: 1px solid var(--color-neutral-200);
+}
+.dark .markdown-preview img {
+  border-color: var(--color-neutral-800);
+}
+
+.markdown-preview input[type="checkbox"] {
+  margin-right: 0.45rem;
+  accent-color: var(--color-brand-600);
+  border-radius: 0.25rem;
 }

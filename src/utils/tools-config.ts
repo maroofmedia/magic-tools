@@ -269,6 +269,29 @@ export const TOOLS: ToolConfig[] = [
       'Free online spreadsheet viewer and editor. Edit Excel, CSV, TSV, and Google Sheets files directly in your browser with change tracking and undo/redo. 100% on-device & private.',
     featured: true,
   },
+
+  // ── DOCUMENT & TEXT TOOLS ────────────────────
+
+  {
+    slug: 'markdown-editor',
+    name: 'Markdown Editor',
+    description: 'Split-screen Markdown editor with live preview, word counter & export.',
+    longDescription:
+      'Write, edit, and preview Markdown in real-time. Features split-screen desktop mode, mobile-friendly tabs, formatting toolbar, synchronized scrolling, live statistics, and instant export to .md — 100% locally on your device.',
+    category: 'document',
+    icon: '📝',
+    acceptedTypes: [
+      'text/markdown',
+      'text/plain',
+      'text/x-markdown',
+    ],
+    acceptedExtensions: ['.md', '.markdown', '.txt'],
+    multiFile: false,
+    maxSizeMB: 20,
+    metaDescription:
+      'Free online split-screen Markdown editor with live preview, word counter, and instant export to Markdown. 100% private, responsive and on-device.',
+    featured: true,
+  },
 ];
 
 /** Lookup a tool by slug */
@@ -305,5 +328,11 @@ export const CATEGORIES: { id: ToolCategory; label: string; icon: string; descri
     label: 'Spreadsheet Tools',
     icon: '📊',
     description: 'View, edit, track changes, and convert Excel, CSV, and sheets.',
+  },
+  {
+    id: 'document',
+    label: 'Document & Text Tools',
+    icon: '📝',
+    description: 'Write, preview, convert, and format Markdown and text documents.',
   },
 ];
