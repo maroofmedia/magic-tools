@@ -137,10 +137,13 @@ a {
   border-radius: 6px;
 }
 
-/* Exclude markdown editor textarea from global focus-visible outline */
+/* Exclude markdown editor and word counter textareas from global focus-visible outline */
 .markdown-editor-textarea,
 .markdown-editor-textarea:focus,
-.markdown-editor-textarea:focus-visible {
+.markdown-editor-textarea:focus-visible,
+.word-counter-textarea,
+.word-counter-textarea:focus,
+.word-counter-textarea:focus-visible {
   outline: none !important;
   outline-offset: 0 !important;
   box-shadow: none !important;

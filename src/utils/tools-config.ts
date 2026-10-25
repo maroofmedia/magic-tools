@@ -292,6 +292,26 @@ export const TOOLS: ToolConfig[] = [
       'Free online split-screen Markdown editor with live preview, word counter, and instant export to Markdown. 100% private, responsive and on-device.',
     featured: true,
   },
+  {
+    slug: 'word-counter',
+    name: 'Word Counter',
+    description: 'Real-time word, character, sentence, paragraph, and reading time counter.',
+    longDescription:
+      'Accurately count words, characters (with and without spaces), sentences, paragraphs, and reading time in real-time. Features undo/redo history, case converters, file upload, and text export — 100% private and on-device.',
+    category: 'document',
+    icon: '📊',
+    acceptedTypes: [
+      'text/plain',
+      'text/markdown',
+      'text/csv',
+    ],
+    acceptedExtensions: ['.txt', '.md', '.markdown', '.text'],
+    multiFile: false,
+    maxSizeMB: 20,
+    metaDescription:
+      'Free online word and character counter. Count words, characters, sentences, paragraphs, and reading time in real-time with undo/redo and text tools. 100% client-side.',
+    featured: true,
+  },
 ];
 
 /** Lookup a tool by slug */
