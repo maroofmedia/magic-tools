@@ -229,6 +229,29 @@ export const TOOLS: ToolConfig[] = [
       'Reduce PDF file size online for free while keeping text and images clear.',
   },
   {
+    slug: 'page-designer',
+    name: 'Page Designer & PDF Maker',
+    description: 'Design custom pages, arrange ID cards & photos, and export 300 DPI print-ready PDF or images.',
+    longDescription:
+      'Create blank pages of standard paper sizes (A4, A5, Letter) or custom dimensions. Visually arrange, resize, rotate, and crop photos or identity cards (front & back), and export to high-resolution 300 DPI PDF, PNG, or JPEG — 100% locally and privately on your device.',
+    category: 'pdf',
+    icon: '📐',
+    acceptedTypes: [
+      'image/jpeg',
+      'image/png',
+      'image/webp',
+      'image/avif',
+      'image/bmp',
+    ],
+    acceptedExtensions: ['.jpg', '.jpeg', '.png', '.webp', '.avif', '.bmp'],
+    multiFile: true,
+    maxSizeMB: 50,
+    maxTotalSizeMB: 500,
+    metaDescription:
+      'Free online visual page designer and image-to-PDF maker. Arrange ID cards, photos, and documents on A4 or custom pages with print-ready 300 DPI PDF export. 100% private.',
+    featured: true,
+  },
+  {
     slug: 'pdf-to-images',
     name: 'PDF to Images',
     description: 'Convert PDF pages into JPG or PNG images.',
