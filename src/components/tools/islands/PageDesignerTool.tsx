@@ -98,57 +98,31 @@ interface StoredProject {
 }
 
 // ─────────────────────────────────────────────
-// IndexedDB Auto-Save Helpers
+// LocalStorage Auto-Save Helpers
 // ─────────────────────────────────────────────
-const DB_NAME = 'MagicToolsPageDesigner';
-const DB_STORE = 'autosave';
+const STORAGE_KEY = 'magictools_pagedesigner_project';
 
-function openAutoSaveDb(): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
-    if (typeof indexedDB === 'undefined') {
-      return reject(new Error('IndexedDB not supported'));
-    }
-    const req = indexedDB.open(DB_NAME, 1);
-    req.onupgradeneeded = () => {
-      const db = req.result;
-      if (!db.objectStoreNames.contains(DB_STORE)) {
-        db.createObjectStore(DB_STORE);
-      }
-    };
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
-  });
-}
-
-async function saveToIndexedDb(project: StoredProject): Promise<void> {
+function saveProjectToStorage(project: StoredProject): void {
   try {
-    const db = await openAutoSaveDb();
-    const tx = db.transaction(DB_STORE, 'readwrite');
-    tx.objectStore(DB_STORE).put(project, 'current_draft');
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(project));
   } catch {
-    // Ignore
+    // Ignore quota or private browsing errors
   }
 }
 
-async function loadFromIndexedDb(): Promise<StoredProject | null> {
+function loadProjectFromStorage(): StoredProject | null {
   try {
-    const db = await openAutoSaveDb();
-    return new Promise((resolve) => {
-      const tx = db.transaction(DB_STORE, 'readonly');
-      const req = tx.objectStore(DB_STORE).get('current_draft');
-      req.onsuccess = () => resolve(req.result || null);
-      req.onerror = () => resolve(null);
-    });
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
   } catch {
     return null;
   }
 }
 
-async function clearIndexedDb(): Promise<void> {
+function clearProjectStorage(): void {
   try {
-    const db = await openAutoSaveDb();
-    const tx = db.transaction(DB_STORE, 'readwrite');
-    tx.objectStore(DB_STORE).delete('current_draft');
+    localStorage.removeItem(STORAGE_KEY);
   } catch {
     // Ignore
   }
@@ -233,8 +207,7 @@ export default function PageDesignerTool({ tool: _tool }: Props) {
   const [showDownloadMenu, setShowDownloadMenu] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [exportMessage, setExportMessage] = useState('');
-  const [hasRestoredDraft, setHasRestoredDraft] = useState(false);
-  const [draftNotice, setDraftNotice] = useState<StoredProject | null>(null);
+  const lastDoneTimeRef = useRef<number>(0);
 
   // Transform State (Resize & Move & Rotate)
   const [transformMode, setTransformMode] = useState<
@@ -260,6 +233,7 @@ export default function PageDesignerTool({ tool: _tool }: Props) {
   const replaceFileInputRef = useRef<HTMLInputElement>(null);
   const projectFileInputRef = useRef<HTMLInputElement>(null);
   const downloadMenuRef = useRef<HTMLDivElement>(null);
+  const lastClickRef = useRef<{ id: string; time: number } | null>(null);
 
   const selectedObject = useMemo(() => {
     return objects.find((obj) => obj.id === selectedId) || null;
@@ -333,42 +307,30 @@ export default function PageDesignerTool({ tool: _tool }: Props) {
   }, [history, historyIndex]);
 
   // ─────────────────────────────────────────────
-  // Auto-Save Draft to IndexedDB
+  // Auto-Save Draft to LocalStorage (Silently saves & restores last project)
   // ─────────────────────────────────────────────
   useEffect(() => {
     const timer = setTimeout(() => {
       if (objects.length > 0) {
-        saveToIndexedDb({
+        saveProjectToStorage({
           version: 1,
           savedAt: new Date().toISOString(),
           pageConfig,
           objects,
         });
       }
-    }, 1500);
+    }, 1000);
     return () => clearTimeout(timer);
   }, [objects, pageConfig]);
 
   useEffect(() => {
-    loadFromIndexedDb().then((draft) => {
-      if (draft && draft.objects && draft.objects.length > 0) {
-        setDraftNotice(draft);
-      }
-    });
+    const saved = loadProjectFromStorage();
+    if (saved && saved.pageConfig && Array.isArray(saved.objects) && saved.objects.length > 0) {
+      setPageConfig(saved.pageConfig);
+      setObjects(saved.objects);
+      pushHistory('Restored saved project', saved.objects, saved.pageConfig);
+    }
   }, []);
-
-  const restoreDraft = (draft: StoredProject) => {
-    setPageConfig(draft.pageConfig);
-    setObjects(draft.objects);
-    setDraftNotice(null);
-    setHasRestoredDraft(true);
-    pushHistory('Restored saved project', draft.objects, draft.pageConfig);
-  };
-
-  const discardDraft = () => {
-    clearIndexedDb();
-    setDraftNotice(null);
-  };
 
   // ─────────────────────────────────────────────
   // Fit Page to Screen
@@ -774,6 +736,23 @@ export default function PageDesignerTool({ tool: _tool }: Props) {
     const clickedObj = sorted.find((obj) => obj.visible && !obj.locked && hitTestObject(clickPt, obj));
 
     if (clickedObj) {
+      const now = Date.now();
+      const isDouble =
+        ('detail' in e && (e as MouseEvent).detail >= 2) ||
+        (lastClickRef.current &&
+          lastClickRef.current.id === clickedObj.id &&
+          now - lastClickRef.current.time < 350);
+
+      lastClickRef.current = { id: clickedObj.id, time: now };
+
+      // Double-click/double-tap opens crop tool directly
+      if (isDouble) {
+        setSelectedId(clickedObj.id);
+        setIsCropping(true);
+        setTransformMode('none');
+        return;
+      }
+
       if (selectedId !== clickedObj.id) {
         setIsCropping(false);
       }
@@ -795,8 +774,23 @@ export default function PageDesignerTool({ tool: _tool }: Props) {
     } else {
       setSelectedId(null);
       setIsCropping(false);
-      setIsPanning(true);
-      setPanStart({ x: clientX - pan.x, y: clientY - pan.y });
+      // On mobile / touch, NEVER start canvas panning — keep canvas static so normal webpage scrolling is undisturbed
+      const isTouch = 'touches' in e;
+      if (!isTouch && typeof window !== 'undefined' && window.innerWidth >= 1024) {
+        setIsPanning(true);
+        setPanStart({ x: clientX - pan.x, y: clientY - pan.y });
+      }
+    }
+  };
+
+  const handleDoubleClick = (e: MouseEvent) => {
+    const clickPt = clientToPageMm(e.clientX, e.clientY);
+    const sorted = [...objects].sort((a, b) => b.zIndex - a.zIndex);
+    const clickedObj = sorted.find((obj) => obj.visible && !obj.locked && hitTestObject(clickPt, obj));
+    if (clickedObj) {
+      setSelectedId(clickedObj.id);
+      setIsCropping(true);
+      setTransformMode('none');
     }
   };
 
@@ -1026,7 +1020,8 @@ export default function PageDesignerTool({ tool: _tool }: Props) {
 
   useEffect(() => {
     const onMove = (e: MouseEvent | TouchEvent) => {
-      if (transformMode !== 'none' || cropHandle !== 'none' || isPanning) {
+      // Only prevent native page scroll when actively manipulating an object or crop/resize handle
+      if (transformMode !== 'none' || cropHandle !== 'none') {
         if ('touches' in e && e.cancelable) {
           e.preventDefault();
         }
@@ -1394,6 +1389,39 @@ export default function PageDesignerTool({ tool: _tool }: Props) {
     };
   };
 
+  // Safe toolbar actions to prevent mobile ghost clicks between overlapping buttons
+  const handleDoneCropping = (e: MouseEvent | TouchEvent) => {
+    e.stopPropagation();
+    if ('cancelable' in e && e.cancelable) {
+      e.preventDefault();
+    }
+    lastDoneTimeRef.current = Date.now();
+    setIsCropping(false);
+  };
+
+  const handleOpenMobileProperties = (e: MouseEvent | TouchEvent) => {
+    e.stopPropagation();
+    if ('cancelable' in e && e.cancelable) {
+      e.preventDefault();
+    }
+    // Suppress ghost clicks immediately after tapping "Done" on crop
+    if (Date.now() - lastDoneTimeRef.current < 500) {
+      return;
+    }
+    setMobileDrawer('properties');
+  };
+
+  const handleEnterCrop = (e: MouseEvent | TouchEvent) => {
+    e.stopPropagation();
+    if ('cancelable' in e && e.cancelable) {
+      e.preventDefault();
+    }
+    if (Date.now() - lastDoneTimeRef.current < 500) {
+      return;
+    }
+    setIsCropping(true);
+  };
+
   // ─────────────────────────────────────────────
   // Reusable Layers Component (Sidebar & Mobile Drawer)
   // ─────────────────────────────────────────────
@@ -1429,6 +1457,7 @@ export default function PageDesignerTool({ tool: _tool }: Props) {
                 setObjects([]);
                 setSelectedId(null);
                 setIsCropping(false);
+                clearProjectStorage();
                 pushHistory('Cleared all objects', []);
               }
             }}
@@ -2175,32 +2204,6 @@ export default function PageDesignerTool({ tool: _tool }: Props) {
         </div>
       </header>
 
-      {/* ── AUTO-SAVE RESTORE BANNER ── */}
-      {draftNotice && !hasRestoredDraft && (
-        <div className="flex flex-wrap items-center justify-between gap-2 px-3 sm:px-4 py-2 bg-brand-50 dark:bg-brand-950/60 border-b border-brand-200/80 dark:border-brand-800/80 text-xs text-brand-900 dark:text-brand-200 z-20">
-          <div className="flex items-center gap-2">
-            <span>💾</span>
-            <span>
-              Unsaved draft found ({draftNotice.objects.length} images on {draftNotice.pageConfig.name}).
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => restoreDraft(draftNotice)}
-              className="px-2.5 py-1 rounded bg-brand-600 hover:bg-brand-500 text-white font-medium transition"
-            >
-              Restore
-            </button>
-            <button
-              onClick={discardDraft}
-              className="px-2 py-1 rounded hover:bg-brand-100 dark:hover:bg-brand-900/50 text-brand-700 dark:text-brand-300 transition"
-            >
-              Discard
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* ── MAIN WORKSPACE BODY ── */}
       <div className="flex-1 flex overflow-hidden relative">
 
@@ -2214,6 +2217,7 @@ export default function PageDesignerTool({ tool: _tool }: Props) {
           ref={workspaceRef}
           onMouseDown={handlePointerDown}
           onTouchStart={handlePointerDown}
+          onDoubleClick={handleDoubleClick}
           onWheel={(e) => {
             if (e.ctrlKey || e.metaKey || e.altKey) {
               e.preventDefault();
@@ -2221,7 +2225,7 @@ export default function PageDesignerTool({ tool: _tool }: Props) {
               setZoom((z) => clamp(parseFloat((z + delta).toFixed(2)), 0.2, 3.0));
             }
           }}
-          className="flex-1 bg-neutral-100/90 dark:bg-neutral-900/90 relative overflow-hidden flex items-center justify-center cursor-default touch-none"
+          className="flex-1 bg-neutral-100/90 dark:bg-neutral-900/90 relative overflow-hidden flex items-center justify-center cursor-default touch-pan-y lg:touch-none"
           style={{
             backgroundImage: `radial-gradient(currentColor 1px, transparent 1px)`,
             backgroundSize: '24px 24px',
@@ -2275,20 +2279,15 @@ export default function PageDesignerTool({ tool: _tool }: Props) {
                     className="absolute -top-11 left-1/2 -translate-x-1/2 flex items-center gap-1.5 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-full px-2.5 py-1 shadow-lg pointer-events-auto z-40 text-xs whitespace-nowrap animate-in fade-in zoom-in-95 duration-100"
                     onMouseDown={(e) => e.stopPropagation()}
                     onTouchStart={(e) => e.stopPropagation()}
+                    onDoubleClick={(e) => e.stopPropagation()}
                   >
                     {!isCropping ? (
                       <>
                         <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setIsCropping(true);
-                          }}
-                          onTouchStart={(e) => {
-                            e.stopPropagation();
-                            setIsCropping(true);
-                          }}
+                          onClick={handleEnterCrop}
+                          onTouchEnd={handleEnterCrop}
                           className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-600 hover:bg-brand-500 text-white font-semibold shadow-xs transition active:scale-95 touch-none"
-                          title="Click to crop image from 4 sides"
+                          title="Click or double-click image to crop from 4 sides"
                         >
                           <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                             <path d="M6 2v14a2 2 0 0 0 2 2h14" />
@@ -2298,14 +2297,8 @@ export default function PageDesignerTool({ tool: _tool }: Props) {
                         </button>
 
                         <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setMobileDrawer('properties');
-                          }}
-                          onTouchStart={(e) => {
-                            e.stopPropagation();
-                            setMobileDrawer('properties');
-                          }}
+                          onClick={handleOpenMobileProperties}
+                          onTouchEnd={handleOpenMobileProperties}
                           className="lg:hidden flex items-center gap-1 px-2.5 py-1 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 font-medium hover:bg-neutral-200 transition touch-none"
                           title="Open Settings"
                         >
@@ -2314,21 +2307,6 @@ export default function PageDesignerTool({ tool: _tool }: Props) {
                         </button>
 
                         <div className="w-px h-4 bg-neutral-200 dark:bg-neutral-700 mx-0.5" />
-
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDuplicateObject(selectedObject.id);
-                          }}
-                          onTouchStart={(e) => {
-                            e.stopPropagation();
-                            handleDuplicateObject(selectedObject.id);
-                          }}
-                          className="p-1 px-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-600 dark:text-neutral-300 text-xs font-medium touch-none"
-                          title="Duplicate (Ctrl+D)"
-                        >
-                          Duplicate
-                        </button>
 
                         <button
                           onClick={(e) => {
@@ -2352,14 +2330,8 @@ export default function PageDesignerTool({ tool: _tool }: Props) {
                         </span>
                         <div className="w-px h-4 bg-neutral-200 dark:bg-neutral-700 mx-0.5" />
                         <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setIsCropping(false);
-                          }}
-                          onTouchStart={(e) => {
-                            e.stopPropagation();
-                            setIsCropping(false);
-                          }}
+                          onClick={handleDoneCropping}
+                          onTouchEnd={handleDoneCropping}
                           className="px-2.5 py-0.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold transition active:scale-95 touch-none"
                         >
                           ✓ Done
