@@ -46,7 +46,7 @@ export default function MarkdownEditorTool({ tool }: Props) {
 
   // Initialize marked options
   useEffect(() => {
-    marked.setOptions({
+    marked.use({
       gfm: true,
       breaks: true,
     });
@@ -91,8 +91,14 @@ export default function MarkdownEditorTool({ tool }: Props) {
   useEffect(() => {
     // Render Markdown
     try {
-      const html = marked.parse(content) as string;
-      setRenderedHtml(html);
+      const res = marked.parse(content);
+      if (typeof res === 'string') {
+        setRenderedHtml(res);
+      } else if (res && typeof (res as any).then === 'function') {
+        (res as Promise<string>).then((html) => setRenderedHtml(html)).catch((err) => {
+          console.error('Markdown async parse error', err);
+        });
+      }
     } catch (e) {
       console.error('Markdown parse error', e);
     }

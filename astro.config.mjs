@@ -13,11 +13,11 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
     optimizeDeps: {
-      include: ['pdf-lib', 'browser-image-compression', 'jszip', 'heic2any', 'xlsx'],
+      include: ['pdf-lib', 'browser-image-compression', 'jszip', 'heic2any', 'xlsx', 'marked'],
       exclude: ['pdfjs-dist'],
     },
     ssr: {
-      noExternal: ['pdf-lib', 'browser-image-compression', 'jszip', 'xlsx'],
+      noExternal: ['pdf-lib', 'browser-image-compression', 'jszip', 'xlsx', 'marked'],
     },
     build: {
       rollupOptions: {
@@ -28,6 +28,7 @@ export default defineConfig({
             if (id.includes('browser-image-compression')) return 'imgcompression';
             if (id.includes('heic2any')) return 'heic2any';
             if (id.includes('xlsx')) return 'xlsx';
+            if (id.includes('marked')) return 'marked';
           },
         },
       },

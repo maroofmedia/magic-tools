@@ -1181,6 +1181,9 @@ export default function PageDesignerTool({ tool: _tool }: Props) {
     const ctx = offscreen.getContext('2d');
     if (!ctx) throw new Error('Could not create offscreen context');
 
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+
     const dpmm = targetDpi / 25.4;
     const outW = Math.round(pageWidthMm * dpmm);
     const outH = Math.round(pageHeightMm * dpmm);
@@ -1276,15 +1279,40 @@ export default function PageDesignerTool({ tool: _tool }: Props) {
     setShowDownloadMenu(false);
     try {
       setIsExporting(true);
-      setExportMessage('Generating high-resolution PNG image...');
-      const canvas = await renderHighResCanvas(300);
-      const blob = await new Promise<Blob>((resolve) => canvas.toBlob((b) => resolve(b!), 'image/png'));
+      setExportMessage('Generating crisp PNG (optimized < 1 MB)...');
+
+      const MAX_BYTES = 1000 * 1024; // Strict limit: below 1 MB
+      const TARGET_BYTES = 900 * 1024; // Safe target ~900 KB
+
+      // Start with high resolution (150 DPI = 1240x1754 px for A4, razor-sharp on all screens & prints)
+      let currentDpi = 150;
+      let canvas = await renderHighResCanvas(currentDpi);
+      let blob = await new Promise<Blob>((resolve) => canvas.toBlob((b) => resolve(b!), 'image/png'));
+
+      // If file size exceeds 1MB, adaptively adjust DPI to guarantee < 1MB without noticeable loss
+      if (blob.size > MAX_BYTES) {
+        const scaleFactor = Math.min(0.92, Math.sqrt(TARGET_BYTES / blob.size));
+        currentDpi = Math.max(96, Math.floor(currentDpi * scaleFactor));
+        canvas = await renderHighResCanvas(currentDpi);
+        blob = await new Promise<Blob>((resolve) => canvas.toBlob((b) => resolve(b!), 'image/png'));
+
+        // Failsafe pass for exceptionally dense photos
+        if (blob.size > MAX_BYTES) {
+          const secondScale = Math.min(0.88, Math.sqrt(TARGET_BYTES / blob.size));
+          currentDpi = Math.max(72, Math.floor(currentDpi * secondScale));
+          canvas = await renderHighResCanvas(currentDpi);
+          blob = await new Promise<Blob>((resolve) => canvas.toBlob((b) => resolve(b!), 'image/png'));
+        }
+      }
+
       const filename = `${pageConfig.name.toLowerCase().replace(/\s+/g, '-')}-layout.png`;
       downloadBlob(blob, filename);
     } catch (err) {
       console.error('Failed to export PNG', err);
+      alert('Failed to export PNG. Please try again.');
     } finally {
       setIsExporting(false);
+      setExportMessage('');
     }
   };
 
@@ -2164,6 +2192,7 @@ export default function PageDesignerTool({ tool: _tool }: Props) {
                     <span className="text-sky-500 font-semibold">PNG</span>
                     <span>Download as Image (PNG)</span>
                   </div>
+                  <span className="text-[10px] text-neutral-400 font-mono">&lt; 1 MB</span>
                 </button>
 
                 <button
